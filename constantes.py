@@ -6,7 +6,7 @@ altoPersonaje = 20
 
 fps = 90
 velocidad = 10
-escalaPersonaje = 0.5
+escalaPersonaje = 0.15
 
 #Declaro colores
 blanco = (255,255,255)

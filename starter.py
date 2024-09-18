@@ -11,23 +11,26 @@ from personaje import Personaje
 #Inicializo pygame
 pygame.init()
 
+#Creo y seteo valores a la pantalla
 pantalla = pygame.display.set_mode((500, 750))
-pygame.display.set_caption("Hungry Jump")
+pygame.display.set_caption("Hungry Jump") #Titulo de la ventana
 
-#Declaro e inserto el icono
+#Declaro e inserto el icono de la ventana
 icono = pygame.image.load("assets/images/items/banana0.png")
 pygame.display.set_icon(icono)
 
+#Fondo del menu
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
 
-
+#Fuente
 def get_font(size):
     return pygame.font.Font("assets/Font/font.ttf", size)
 
+#Función de la pantalla play
 def jugar():
-    menuplay.play()
+    menuplay.play() #mando llamar la funcion play del archivo menuplay
 
-    
+#Función de la pantalla opciones    
 def options():
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
@@ -54,6 +57,7 @@ def options():
 
         pygame.display.update()
 
+#Funcion del menu principal
 def main_menu():
     # Variables para el desplazamiento del fondo
     x = 0  # Posición inicial del fondo
@@ -61,7 +65,7 @@ def main_menu():
 
     # Carga la imagen con el nombre del juego
     titulo = pygame.image.load("assets/images/menu/Título.png")
-    tituloS = pygame.transform.scale(titulo, (int(titulo.get_width() * 0.4), int(titulo.get_height() * 0.4)))  #Escala al 50%
+    tituloS = pygame.transform.scale(titulo, (int(titulo.get_width() * 0.4), int(titulo.get_height() * 0.4)))  #Escala al 40%
     tituloPos = (45, 200)  # Posición en la pantalla
 
     while True:
