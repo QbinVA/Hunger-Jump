@@ -9,46 +9,57 @@ def play():
     pantalla = pygame.display.set_mode((constantes.anchoVentana, constantes.altoVentana))
     pygame.display.set_caption('Hungry Jump')
 
+
     # Carga imágenes
-    icono = pygame.image.load("assets/images/items/banana0.png")
-    pygame.display.set_icon(icono)
+    icono = pygame.image.load("assets/images/items/banana0.png") #Importo el icono de la ventana
+    pygame.display.set_icon(icono) #Lo despliego
+
+    #Importo el fondo del nivel
     fondo = pygame.image.load("assets/images/fondos/lvl 1.png").convert()
+
+    #Importo la imagen del suelo
     sueloPasto = pygame.image.load("assets/images/fondos/sueloPasto.png")
-    ramaD = pygame.image.load("assets/images/fondos/ramaDer.png")
-    ramaI = pygame.image.load("assets/images/fondos/ramaIzq.png")
+
+    #Importo las imagenes de las ramas
+    ramaD = pygame.image.load("assets/images/fondos/ramaDer.png") # Rama derecha
+    ramaI = pygame.image.load("assets/images/fondos/ramaIzq.png") # Rama izquierda
 
     # Redimensionar imágenes del personaje
-    ancho_personaje = 250
-    alto_personaje = 250  # Ajusta según sea necesario
+    ancho_personaje = 250  # Ancho del personaje
+    alto_personaje = 250  # Altura del personaje
 
-    quieto = pygame.image.load("assets/images/personajes/niño0.png")
-    quieto = pygame.transform.scale(quieto, (ancho_personaje, alto_personaje))
+    quieto = pygame.image.load("assets/images/personajes/niño0.png") # Importo la imagen del niño quieto
+    quieto = pygame.transform.scale(quieto, (ancho_personaje, alto_personaje)) # La escalo al tamaño preestablecido
 
-    saltaDer = [pygame.image.load('assets/images/personajes/niño1.png') for _ in range(4)]
-    saltaDer = [pygame.transform.scale(img, (ancho_personaje, alto_personaje)) for img in saltaDer]
+    saltaDer = [pygame.image.load('assets/images/personajes/niño1.png') for _ in range(4)] # Importo la imagen del niño saltando a la derecha
+    saltaDer = [pygame.transform.scale(img, (ancho_personaje, alto_personaje)) for img in saltaDer] # La escalo al tamaño preestablecido
 
-    saltaIzq = [pygame.image.load('assets/images/personajes/niño1i.png') for _ in range(4)]
-    saltaIzq = [pygame.transform.scale(img, (ancho_personaje, alto_personaje)) for img in saltaIzq]
+    saltaIzq = [pygame.image.load('assets/images/personajes/niño1i.png') for _ in range(4)] # Importo la imagen del niño saltando a la izquierda
+    saltaIzq = [pygame.transform.scale(img, (ancho_personaje, alto_personaje)) for img in saltaIzq] # La escalo al tamaño preestablecido
 
     # Definir las variables de posicion
     px = 0  # Posicion en el eje x
-    py = 470  # Posicion en el eje y
+    py = 40  # Posicion en el eje y
 
+    # Velocidad a la que se mueve el personaje
     velocidad = 7
     reloj = pygame.time.Clock()
 
     # Variables de salto
-    salto = True
-    cuentaSalto = 20
+    en_salto = True # Salto siempre habilitado
+    cuentaSalto = 30 # Pixeles que salta por cada segundo
+    velocidad_salto = 6 # Velocidad de salto
+    direccion_salto = -1  # -1 para subir, 1 para bajar
 
     # Variables de dirección
-    izquierda = False
-    derecha = False
+    izquierda = False # Falso para que no esté en movimiento continuo
+    derecha = False # Falso para que no esté en movimiento continuo
 
-    # Pasos
+    # Cuenta los pasos para cambiar las imagenes de movimiento
     cuentaPasos = 0
 
     def recarga_pantalla():
+        # Declara variables
         nonlocal cuentaPasos, izquierda, derecha, px, py, saltaIzq, saltaDer, quieto
 
         # Contador de pasos
@@ -63,11 +74,12 @@ def play():
             pantalla.blit(saltaDer[cuentaPasos], (int(px), int(py)))
 
         # Personaje quieto
-        elif salto:
+        elif en_salto:
             pantalla.blit(quieto, (int(px), int(py)))
         else:
             pantalla.blit(quieto, (int(px), int(py)))
 
+    # Mantiene el bucle
     run = True
     y = 0
 
@@ -108,6 +120,27 @@ def play():
         else:
             izquierda = False
             derecha = False
+
+        # Lógica del salto
+        if en_salto:
+            py += velocidad_salto * direccion_salto
+            cuentaSalto -= 1
+
+            if cuentaSalto <= 0:
+                # Cambio de dirección al llegar al punto más alto del salto
+                direccion_salto *= -1
+                cuentaSalto = 30  # Reiniciar contador de salto
+
+            if py >= 470:
+                # Volver al suelo
+                py = 470
+                en_salto = False
+                cuentaSalto = 30  # Reiniciar contador de salto
+
+        # Alternar salto
+        if not en_salto:
+            en_salto = True
+            cuentaSalto = 30
 
 
         # Llamada a la función para actualizar la pantalla
