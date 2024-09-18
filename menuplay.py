@@ -1,110 +1,126 @@
 import pygame
 import constantes
-from personaje import Personaje
 
 def play():
-    while True:
+    # Inicializa Pygame
+    pygame.init()
 
-        #Declaro la variable pantalla con sus respectivos valores
-        pantalla = pygame.display.set_mode((constantes.anchoVentana, constantes.altoVentana))
+    # Configura la pantalla
+    pantalla = pygame.display.set_mode((constantes.anchoVentana, constantes.altoVentana))
+    pygame.display.set_caption('Hungry Jump')
 
-        #Declaro e inserto el icono
-        icono = pygame.image.load("assets/images/items/banana0.png")
-        pygame.display.set_icon(icono)
+    # Carga imágenes
+    icono = pygame.image.load("assets/images/items/banana0.png")
+    pygame.display.set_icon(icono)
+    fondo = pygame.image.load("assets/images/fondos/lvl 1.png").convert()
+    sueloPasto = pygame.image.load("assets/images/fondos/sueloPasto.png")
+    ramaD = pygame.image.load("assets/images/fondos/ramaDer.png")
+    ramaI = pygame.image.load("assets/images/fondos/ramaIzq.png")
 
-        #Declaro e inserto el fondo
-        fondo = pygame.image.load("assets/images/fondos/lvl 1.png").convert()
-        y = 0
+    # Redimensionar imágenes del personaje
+    ancho_personaje = 250
+    alto_personaje = 250  # Ajusta según sea necesario
+
+    quieto = pygame.image.load("assets/images/personajes/niño0.png")
+    quieto = pygame.transform.scale(quieto, (ancho_personaje, alto_personaje))
+
+    saltaDer = [pygame.image.load('assets/images/personajes/niño1.png') for _ in range(4)]
+    saltaDer = [pygame.transform.scale(img, (ancho_personaje, alto_personaje)) for img in saltaDer]
+
+    saltaIzq = [pygame.image.load('assets/images/personajes/niño1i.png') for _ in range(4)]
+    saltaIzq = [pygame.transform.scale(img, (ancho_personaje, alto_personaje)) for img in saltaIzq]
+
+    # Definir las variables de posicion
+    px = 0  # Posicion en el eje x
+    py = 470  # Posicion en el eje y
+
+    velocidad = 7
+    reloj = pygame.time.Clock()
+
+    # Variables de salto
+    salto = True
+    cuentaSalto = 20
+
+    # Variables de dirección
+    izquierda = False
+    derecha = False
+
+    # Pasos
+    cuentaPasos = 0
+
+    def recarga_pantalla():
+        nonlocal cuentaPasos, izquierda, derecha, px, py, saltaIzq, saltaDer, quieto
+
+        # Contador de pasos
+        cuentaPasos = (cuentaPasos + 1) % 4
+
+        # Movimiento a la izquierda
+        if izquierda:
+            pantalla.blit(saltaIzq[cuentaPasos], (int(px), int(py)))
+
+        # Movimiento a la derecha
+        elif derecha:
+            pantalla.blit(saltaDer[cuentaPasos], (int(px), int(py)))
+
+        # Personaje quieto
+        elif salto:
+            pantalla.blit(quieto, (int(px), int(py)))
+        else:
+            pantalla.blit(quieto, (int(px), int(py)))
+
+    run = True
+    y = 0
+
+    while run:
+        # Dibujar el fondo
+        yRelativa = y % fondo.get_rect().height
+        pantalla.blit(fondo, (0, yRelativa - fondo.get_rect().height))
+        if yRelativa < constantes.altoVentana:
+            pantalla.blit(fondo, (0, yRelativa))
+        y += 1
+
+        # Dibujar suelo y ramas
+        pantalla.blit(sueloPasto, (0, 360))
+        pantalla.blit(ramaD, (310, 430))
+        pantalla.blit(ramaI, (-10, 320))
+
+        # Verificar los eventos
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        # Manejo de teclas
+        keys = pygame.key.get_pressed()
+
+        # Tecla LEFT - Movimiento a la izquierda
+        if keys[pygame.K_LEFT] and px > -70:  # Permite moverse más allá del borde izquierdo
+            px -= velocidad
+            izquierda = True
+            derecha = False
+
+        # Tecla RIGHT - Movimiento a la derecha
+        elif keys[pygame.K_RIGHT] and px < 310:  # Permite moverse más allá del borde derecho
+            px += velocidad
+            izquierda = False
+            derecha = True
+
+        # Personaje quieto
+        else:
+            izquierda = False
+            derecha = False
 
 
-        #controlar el frame rate
-        reloj = pygame.time.Clock()
+        # Llamada a la función para actualizar la pantalla
+        recarga_pantalla()
 
-        #Inserto un caption
-        pygame.display.set_caption('Hungry Jump')
+        # Actualizar la pantalla
+        pygame.display.update()
 
-        #Imagenes a escala
-        def escalar_img(image, scale):
-            w = image.get_width()
-            h = image.get_height()
-            nueva_imagen = pygame.transform.scale(image, (w*scale, h*scale))
-            return nueva_imagen
+        # Controlar el frame rate
+        reloj.tick(constantes.fps)
 
-        # Personaje
-        animacionX = []
-        for i in range (2):
-            img = pygame.image.load(f'assets/images/items/banana{i}.png')
-            img = escalar_img(img, constantes.escalaPersonaje)
-            animacionX.append(img)
+    # Salida del juego
+    pygame.quit()
 
-        salta = [pygame.image.load('assets/images/items/banana0.png'),
-                pygame.image.load('assets/images/items/banana0.png')]
-
-        jugador = Personaje(50, 50, animacionX)
-
-
-        #Definir las variables de movimiento del jugador
-        # Posición y tamaño del personaje
-        px = 400
-        py = 500
-        ancho = 10
-
-        # Variables de salto
-        salto = True  # El personaje está saltando al principio
-        cuentaSalto = 20  # Aumentamos este valor para controlar la altura del salto
-
-        # Variables de dirección
-        izquierda = False
-        derecha = False
-        cuentaPasos = 0
-
-        run = True
-        #Ciclo infinito
-        while run == True:
-
-            # Rellenar la pantalla de negro antes de dibujar cualquier cosa
-            pantalla.fill(constantes.negro)
-
-            #Calcular el movimiento del jugador
-            delta_x = 0
-            delta_y = 0
-
-            if izquierda == True:
-                delta_x = -constantes.velocidad
-            if derecha == True:
-                delta_x = constantes.velocidad
-
-            # Mover al jugador
-            jugador.movimiento(delta_x, delta_y)
-            jugador.update()
-
-            # Dibujar el fondo después de rellenar la pantalla de negro si aún lo quieres visible
-            yRelativa = y % fondo.get_rect().height
-            pantalla.blit(fondo, (0, yRelativa - fondo.get_rect().height))
-            if yRelativa < constantes.altoVentana:
-                pantalla.blit(fondo, (0, yRelativa))
-            y += 1
-
-            # Dibujar al jugador por encima del fondo
-            jugador.dibujar(pantalla)
-
-            # Verificar los eventos
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        izquierda = True
-                    if event.key == pygame.K_RIGHT:
-                        derecha = True
-
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_LEFT:
-                        izquierda = False
-                    if event.key == pygame.K_RIGHT:
-                        derecha = False
-
-            # Actualizar la pantalla
-            pygame.display.update()
-            reloj.tick(constantes.fps)
+if __name__ == "__main__":
+    play()
