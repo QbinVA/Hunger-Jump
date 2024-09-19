@@ -39,7 +39,7 @@ def play():
 
     # Definir las variables de posicion
     px = 0  # Posicion en el eje x
-    py = 40  # Posicion en el eje y
+    py = 510  # Posicion en el eje y
 
     # Velocidad a la que se mueve el personaje
     velocidad = 7
@@ -84,34 +84,35 @@ def play():
     y = 0
 
     while run:
-        # Dibujar el fondo
+
+        # Bucle de fondo en constante movimiento, se mueve hacia arriba sumandole pixeles a y
         yRelativa = y % fondo.get_rect().height
         pantalla.blit(fondo, (0, yRelativa - fondo.get_rect().height))
         if yRelativa < constantes.altoVentana:
             pantalla.blit(fondo, (0, yRelativa))
         y += 1
 
-        # Dibujar suelo y ramas
+        # Dibujo el suelo
         pantalla.blit(sueloPasto, (0, 360))
-        pantalla.blit(ramaD, (310, 430))
-        pantalla.blit(ramaI, (-10, 320))
+        pantalla.blit(ramaD, (310, 430)) # Dibujo la rama derecha
+        pantalla.blit(ramaI, (-10, 320)) # Dibujo la rama izquierda
 
         # Verificar los eventos
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT: # Cierra la ventana
                 run = False
 
         # Manejo de teclas
-        keys = pygame.key.get_pressed()
+        keys = pygame.key.get_pressed() # Verifica si alguna tecla está presionada
 
         # Tecla LEFT - Movimiento a la izquierda
-        if keys[pygame.K_LEFT] and px > -70:  # Permite moverse más allá del borde izquierdo
+        if keys[pygame.K_LEFT] and px > -70:  # Margen izquierdo del personaje
             px -= velocidad
             izquierda = True
             derecha = False
 
         # Tecla RIGHT - Movimiento a la derecha
-        elif keys[pygame.K_RIGHT] and px < 310:  # Permite moverse más allá del borde derecho
+        elif keys[pygame.K_RIGHT] and px < 310:  # Margen derecho del personaje
             px += velocidad
             izquierda = False
             derecha = True
@@ -129,21 +130,21 @@ def play():
             if cuentaSalto <= 0:
                 # Cambio de dirección al llegar al punto más alto del salto
                 direccion_salto *= -1
-                cuentaSalto = 30  # Reiniciar contador de salto
+                cuentaSalto = 30  # Pixeles que salta
 
             if py >= 470:
                 # Volver al suelo
                 py = 470
                 en_salto = False
-                cuentaSalto = 30  # Reiniciar contador de salto
+                cuentaSalto = 30  # Pixeles que baja
 
         # Alternar salto
         if not en_salto:
             en_salto = True
-            cuentaSalto = 30
+            cuentaSalto = 30 # Pixeles que salta
 
 
-        # Llamada a la función para actualizar la pantalla
+        # Llamada a la función
         recarga_pantalla()
 
         # Actualizar la pantalla
@@ -154,6 +155,7 @@ def play():
 
     # Salida del juego
     pygame.quit()
+
 
 if __name__ == "__main__":
     play()
