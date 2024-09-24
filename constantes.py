@@ -1,12 +1,10 @@
-anchoVentana = 500
-altoVentana = 750
+anchoVentana = 500 # Define el ancho de la ventana
+altoVentana = 750 # Define el alto de la ventana
 
-anchoPersonaje = 20
-altoPersonaje = 20
+anchoPersonaje = 100 # Define el ancho del personaje
+altoPersonaje = 225 # Define el alto del personaje
 
-fps = 90
-velocidad = 10
-escalaPersonaje = 0.15
+fps = 60 # Define los fps
 
 #Declaro colores
 blanco = (255,255,255)
