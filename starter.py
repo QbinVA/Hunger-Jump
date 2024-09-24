@@ -6,7 +6,7 @@ from pygame.locals import *
 from button import Button
 import constantes
 import menuplay
-from personaje import Personaje
+import sound
 
 #Inicializo pygame
 pygame.init()
@@ -68,6 +68,9 @@ def main_menu():
     tituloS = pygame.transform.scale(titulo, (int(titulo.get_width() * 0.4), int(titulo.get_height() * 0.4)))  #Escala al 40%
     tituloPos = (45, 200)  # Posición en la pantalla
 
+    # Llama a la función sonido del archivo sound
+    sound.sound_menu() # Reproduce el soundtrack del primer nivel
+
     while True:
         # Desplazamiento horizontal del fondo
         x -= velocidad_fondo  # Mueve el fondo hacia la izquierda
@@ -89,7 +92,7 @@ def main_menu():
         PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/StartButton.png"), pos=(250, 530), 
                             text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
         OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/Config.png"), pos=(410, 90), 
-                            text_input="OPTIONS", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
+                            text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
         QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(90, 90), 
                             text_input="QUIT", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
 

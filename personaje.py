@@ -1,41 +1,50 @@
 import pygame
 import constantes
 
-class Personaje():
-    def __init__(self, x, y, animacionX):
-        self.flip = False #voltea la imagen
-        self.animaciones = animacionX
-        #imagen de la animacion que se esta mostrando actualmente
-        self.frame_index = 0
-        #aqui se almacena la hora actual en milisegundos desde que se inicio pygame
-        self.update_time = pygame.time.get_ticks()
-        self.image = animacionX[self.frame_index]
-        self.forma = pygame.Rect(0, 0, constantes.anchoPersonaje, constantes.altoPersonaje)
-        self.forma.center = (x,y)
+class player(pygame.sprite.Sprite):
+    # Sprite del jugador
+    def __init__(self):
+        # Heredamos el init a la clase Sprite de Pygame
+        super().__init__()
+        # Rectangulo (jugador)
+        self.image = pygame.image.load('assets/images/personajes/niño0.png').convert() # Sprite del personaje
+        self.image.set_colorkey(constantes.blanco)
+        # Escala la imagen del personaje a un tamaño específico
+        self.image = pygame.transform.scale(self.image, (constantes.anchoPersonaje, constantes.altoPersonaje))
+        # Obtiene el rectangulo (sprite)
+        self.rect = self.image.get_rect()
+        # Centra el rectangulo (sprite)
+        self.rect.center = (0, 575)
+
+        # Velocidad del personaje inicial
+        self.velocidad_x = 0 # Velocidad en el eje x al cargar el personaje
+        self.velocidad_y = 0 # Velocidad en el eje y al cargar el personaje
+
 
     def update(self):
-        cooldown_animacion = 500 #tiempo en que tarda en cambiar la imagen del personaje
-        self.image = self.animaciones[self.frame_index]
-        #Sumamos 1 al indice para que cambie de imagen
-        if pygame.time.get_ticks() - self.update_time >= cooldown_animacion:
-            self.frame_index = self.frame_index + 1
-            self.update_time = pygame.time.get_ticks()
-        #Regresamos el indice a cero
-        if self.frame_index >= len(self.animaciones):
-            self.frame_index = 0
+        # Velocidad predeterminada cada vuelta del bucle si no pulsas nada
+        self.velocidad_x = 0
+        self.velocidad_y = 0
 
-    def dibujar(self, interfaz):
-        imagen_flip = pygame.transform.flip(self.image, self.flip, False)
-        interfaz.blit(imagen_flip, self.forma)
-        #pygame.draw.rect(interfaz, constantes.rojo, self.forma, 1)
 
-    def movimiento(self, delta_x, delta_y):
-        #Si el movimiento en el eje x es negativo, da vuelta a la izquierda
-        if delta_x < 0:
-            self.flip = True
-        #Si el movimiento en el eje x es positivo, va havia la derecha
-        if delta_x > 0:
-            self.flip = False
+        # Mantiene las teclas pulsadas
+        teclas = pygame.key.get_pressed()
 
-        self.forma.x = self.forma.x + delta_x
-        self.forma.y = self.forma.y + delta_y
+        # Mueve el personaje hacia la izquierda
+        if teclas[pygame.K_LEFT]:
+            self.velocidad_x = -10 # Pixeles que se mueve el personaje hacia la izquierda
+        # Mueve el personaje hacia la derecha
+        if teclas[pygame.K_RIGHT]:
+            self.velocidad_x = 10 # Pixeles que se mueve el personaje hacia la derecha   
+
+        # Actuliza la posicion del personaje
+        self.rect.x += self.velocidad_x
+
+        # Limita el margen izquierdo
+        if self.rect.left < 0: # Si el personaje se sale del marco de la pantalla, lo pone en el borde de la izquierda
+            self.rect.left = 0
+        # Limita el margen derecho
+        if self.rect.right > constantes.anchoVentana: # Si el personaje se sale del marco de la pantalla, lo pone en el borde de la derehca
+            self.rect.right = constantes.anchoVentana
+        
+        
