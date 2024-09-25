@@ -131,7 +131,7 @@ def play():
 
         # Mostrar el tiempo restante en pantalla en la esquina superior derecha
         texto_tiempo = fuente.render(tiempo_formateado, True, constantes.blanco)
-        pantalla.blit(texto_tiempo, (constantes.anchoVentana - 100, 10))  # Ajusta la posición del temporizador
+        pantalla.blit(texto_tiempo, (constantes.anchoVentana - 80, 10))  # Ajusta la posición del temporizador
 
         # Actualizar la pantalla
         pygame.display.update()
