@@ -1,9 +1,10 @@
 import pygame
 import constantes
 
+
 class player(pygame.sprite.Sprite):
     # Esta es la clase del personaje
-    def __init__(self):
+    def __init__(self, ramas):
         # Inicializa la clase base de Pygame, para que el personaje sea un sprite
         super().__init__()
 
@@ -40,16 +41,8 @@ class player(pygame.sprite.Sprite):
         # Define la fuerza de salto y la gravedad que lo empujará hacia abajo
         self.fuerza_salto = -20  # Velocidad al saltar
         self.gravedad = 1  # Velocidad que se incrementa mientras cae
-
-    def salto_constante(self):
-        # Esta función hace que el personaje salte constantemente
-        if self.rect.bottom >= constantes.altoVentana - 100:  # Si el personaje toca el "suelo"
-            self.velocidad_y = self.fuerza_salto  # Aplica la fuerza de salto
-        else:
-            self.velocidad_y += self.gravedad  # Aplica la gravedad cuando no está en el suelo
-
-        # Actualiza la posición vertical del personaje con su velocidad
-        self.rect.y += self.velocidad_y
+        
+        self.ramas = ramas
 
     def update(self):
         # Esta función se ejecuta en cada frame para actualizar el estado del personaje
@@ -73,8 +66,25 @@ class player(pygame.sprite.Sprite):
         # Llama a la función de salto constante para hacer que el personaje salte automáticamente
         self.salto_constante()
 
+        # Verifica si el personaje colisiona con alguna rama
+        colisiones = pygame.sprite.spritecollide(self, self.ramas, False)
+        for rama in colisiones: # Por cada rama con la que colisiona
+            if self.velocidad_y > 0 and self.rect.bottom - 1 <= rama.rect.bottom: # Si el personaje está cayendo y toca la parte superior de la rama
+                self.rect.bottom = rama.rect.top # Coloca al personaje en la parte superior de la rama
+                self.velocidad_y = 0 # Detiene la caída
+
         # Asegura que el personaje no salga de los límites de la pantalla en el eje X
         if self.rect.left < 0:  # Si se sale por la izquierda, lo bloquea en 0
             self.rect.left = 0
         if self.rect.right > constantes.anchoVentana:  # Si se sale por la derecha, lo bloquea en el ancho máximo de la pantalla
             self.rect.right = constantes.anchoVentana
+
+    def salto_constante(self):
+        # Esta función hace que el personaje salte constantemente
+        if self.rect.bottom >= constantes.altoVentana - 100:  # Si el personaje toca el "suelo"
+            self.velocidad_y = self.fuerza_salto  # Aplica la fuerza de salto
+        else:
+            self.velocidad_y += self.gravedad  # Aplica la gravedad cuando no está en el suelo
+
+        # Actualiza la posición vertical del personaje con su velocidad
+        self.rect.y += self.velocidad_y
