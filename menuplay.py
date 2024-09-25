@@ -4,6 +4,7 @@ import constantes
 import sound
 from personaje import player
 from items import aitems
+from rama import Rama  # Asegúrate de importar la clase Rama
 
 def play():
     # Inicializa Pygame
@@ -22,19 +23,22 @@ def play():
     ramaD = pygame.image.load("assets/images/fondos/ramaDer.png")
     ramaI = pygame.image.load("assets/images/fondos/ramaIzq.png")
 
-    imagen_final = pygame.image.load("assets/images/fondos/gameover.jpg").convert()
-    imagen_final = pygame.transform.scale(imagen_final, (constantes.anchoVentana, constantes.altoVentana))
+    # Carga la imagen que se mostrará al finalizar el tiempo
+    imagen_final = pygame.image.load("assets/images/fondos/gameover.jpg").convert()  # Asegúrate de que esta imagen existe
+    imagen_final = pygame.transform.scale(imagen_final, (constantes.anchoVentana, constantes.altoVentana))  # Escala la imagen al tamaño de la ventana
     imagen_final.set_colorkey(constantes.blanco)
 
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(constantes.anchoVentana // 2, 50))  # Coloca el botón en la parte superior derecha
 
+    # Llama a la función sonido del archivo sound
     sound.sound_lvl_1()
 
     reloj = pygame.time.Clock()
 
     # Grupo de sprites, instanciación del objeto jugador
     sprites = pygame.sprite.Group()
+    ramas = pygame.sprite.Group()
 
     # Ejemplo de posiciones de las ramas (ajusta según tu diseño)
     posiciones_ramas = [340, 450]  # Alturas Y de las ramas (ajusta según tus imágenes)
@@ -44,8 +48,13 @@ def play():
         alimento = aitems(posicion)
         sprites.add(alimento)
 
-    # Instanciamos jugador
-    jugador = player()
+    # Instanciar ramas y agregarlas al grupo de ramas
+    ramaD = Rama(310, 430, "assets/images/fondos/ramaDer.png")
+    ramaI = Rama(-10, 320, "assets/images/fondos/ramaIzq.png")
+    ramas.add(ramaD, ramaI)
+    sprites.add(ramaD, ramaI)
+
+    jugador = player(ramas)
     sprites.add(jugador)
 
     # Temporizador
@@ -59,7 +68,18 @@ def play():
     desplazamiento_y = 0
 
     while run:
-        # Verificar los eventos
+        # Bucle de fondo en constante movimiento
+        yRelativa = y % fondo.get_rect().height
+        pantalla.blit(fondo, (0, yRelativa - fondo.get_rect().height))
+        if yRelativa < constantes.altoVentana:
+            pantalla.blit(fondo, (0, yRelativa))
+        y += 1
+
+        pantalla.blit(sueloPasto, (0, 360))
+        
+        # Mostrar el botón de pausa
+        pantalla.blit(boton_pausa, boton_pausa_rect.topleft)  # Dibuja el botón en la pantalla
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -141,5 +161,6 @@ def play():
 
     pygame.quit()
 
-if __name__ == "__main__":
-    play()
+# Ejecutar el juego
+if __name__ == "__main__": # Si el archivo es ejecutado directamente
+    play() # Llama a la función play
