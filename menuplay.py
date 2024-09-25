@@ -24,12 +24,12 @@ def play():
     ramaI = pygame.image.load("assets/images/fondos/ramaIzq.png")
 
     # Carga la imagen que se mostrará al finalizar el tiempo
-    imagen_final = pygame.image.load("assets/images/fondos/gameover.jpg").convert()  # Asegúrate de que esta imagen existe
-    imagen_final = pygame.transform.scale(imagen_final, (constantes.anchoVentana, constantes.altoVentana))  # Escala la imagen al tamaño de la ventana
+    imagen_final = pygame.image.load("assets/images/fondos/gameover.jpg").convert()
+    imagen_final = pygame.transform.scale(imagen_final, (constantes.anchoVentana, constantes.altoVentana))
     imagen_final.set_colorkey(constantes.blanco)
 
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
-    boton_pausa_rect = boton_pausa.get_rect(center=(constantes.anchoVentana // 2, 50))  # Coloca el botón en la parte superior derecha
+    boton_pausa_rect = boton_pausa.get_rect(center=(constantes.anchoVentana // 2, 50))
 
     # Llama a la función sonido del archivo sound
     sound.sound_lvl_1()
@@ -41,7 +41,7 @@ def play():
     ramas = pygame.sprite.Group()
 
     # Ejemplo de posiciones de las ramas (ajusta según tu diseño)
-    posiciones_ramas = [340, 450]  # Alturas Y de las ramas (ajusta según tus imágenes)
+    posiciones_ramas = [340, 450]
 
     # Crea un ítem en cada posición de rama
     for posicion in posiciones_ramas:
@@ -49,8 +49,8 @@ def play():
         sprites.add(alimento)
 
     # Instanciar ramas y agregarlas al grupo de ramas
-    ramaD = Rama(310, 430, "assets/images/fondos/ramaDer.png")
-    ramaI = Rama(-10, 320, "assets/images/fondos/ramaIzq.png")
+    ramaD = Rama(331, 430, "assets/images/fondos/ramaIzq.png")
+    ramaI = Rama(-10, 320, "assets/images/fondos/ramaDer.png")
     ramas.add(ramaD, ramaI)
     sprites.add(ramaD, ramaI)
 
@@ -66,6 +66,7 @@ def play():
 
     run = True
     desplazamiento_y = 0
+    y = 0  # Asegúrate de inicializar 'y' para el desplazamiento del fondo
 
     while run:
         # Bucle de fondo en constante movimiento
@@ -76,9 +77,7 @@ def play():
         y += 1
 
         pantalla.blit(sueloPasto, (0, 360))
-        
-        # Mostrar el botón de pausa
-        pantalla.blit(boton_pausa, boton_pausa_rect.topleft)  # Dibuja el botón en la pantalla
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -87,14 +86,26 @@ def play():
                 mouse_pos = pygame.mouse.get_pos()
                 if boton_pausa_rect.collidepoint(mouse_pos):
                     en_pausa = not en_pausa
-                    print("Pausa:", en_pausa)  # Mensaje de depuración para verificar si se detecta el clic
+                    print("Pausa:", en_pausa)
 
         if not en_pausa:
+            # Controlar el movimiento del jugador
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LEFT]:
+                jugador.velocidad_x = -5
+            elif keys[pygame.K_RIGHT]:
+                jugador.velocidad_x = 5
+            else:
+                jugador.velocidad_x = 0
+            
+            # Actualiza el personaje
+            jugador.update()
+
             # Desplazamiento en y cuando el jugador sube
             if jugador.rect.top <= constantes.altoVentana // 4:
                 desplazamiento_y = constantes.altoVentana // 4 - jugador.rect.top
 
-                # Mover todos los sprites hacia abajo cuando el jugador sube
+                # Mueve todos los sprites hacia abajo cuando el jugador sube
                 for sprite in sprites:
                     sprite.rect.y += desplazamiento_y
 
@@ -106,27 +117,26 @@ def play():
         pantalla.blit(fondo, (0, desplazamiento_y % constantes.altoVentana - constantes.altoVentana))
         pantalla.blit(fondo, (0, desplazamiento_y % constantes.altoVentana))
 
-        # Dibujo el suelo y las ramas
+        # Dibuja el suelo y las ramas
         pantalla.blit(sueloPasto, (0, 360 + desplazamiento_y))
-        pantalla.blit(ramaD, (331, 450 + desplazamiento_y))
-        pantalla.blit(ramaI, (-10, 340 + desplazamiento_y))
-
-        # Mostrar el botón de pausa
-        pantalla.blit(boton_pausa, boton_pausa_rect.topleft)
+        pantalla.blit(ramaD.image, (ramaD.rect.x, ramaD.rect.y + desplazamiento_y))
+        pantalla.blit(ramaI.image, (ramaI.rect.x, ramaI.rect.y + desplazamiento_y))
 
         # Actualización de sprites
-        if not en_pausa:  # Solo actualizar los sprites si no está en pausa
+        if not en_pausa:
             sprites.update()
 
         # Dibuja al personaje y los sprites en pantalla
         sprites.draw(pantalla)
 
+        # Mostrar el botón de pausa
+        pantalla.blit(boton_pausa, boton_pausa_rect.topleft)
+
         # Si está en pausa, dibuja un rectángulo oscuro sobre la pantalla
         if en_pausa:
-            # Crear un rectángulo negro semi-transparente
             sombra = pygame.Surface((constantes.anchoVentana, constantes.altoVentana))
-            sombra.set_alpha(128)  # Ajustar la transparencia (0-255)
-            sombra.fill((0, 0, 0))  # Color negro
+            sombra.set_alpha(128)
+            sombra.fill((0, 0, 0))
             pantalla.blit(sombra, (0, 0))
 
             # Mostrar mensaje de pausa
@@ -151,7 +161,7 @@ def play():
 
         # Mostrar el tiempo restante en pantalla en la esquina superior derecha
         texto_tiempo = fuente.render(tiempo_formateado, True, constantes.blanco)
-        pantalla.blit(texto_tiempo, (constantes.anchoVentana - 80, 10))  # Ajusta la posición del temporizador
+        pantalla.blit(texto_tiempo, (constantes.anchoVentana - 80, 10))
 
         # Actualizar la pantalla
         pygame.display.update()
@@ -162,5 +172,5 @@ def play():
     pygame.quit()
 
 # Ejecutar el juego
-if __name__ == "__main__": # Si el archivo es ejecutado directamente
-    play() # Llama a la función play
+if __name__ == "__main__":
+    play()
