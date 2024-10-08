@@ -5,8 +5,8 @@ import pygame.display
 from pygame.locals import *
 from button import Button
 import constantes
-import menuplay
 import sound
+import dificultad
 
 #Inicializo pygame
 pygame.init()
@@ -28,7 +28,7 @@ def get_font(size):
 
 #Función de la pantalla play
 def jugar():
-    menuplay.play() #mando llamar la funcion play del archivo menuplay
+    dificultad.difi() #mando llamar la funcion play del archivo menuplay
 
 #Función de la pantalla opciones    
 def options():
