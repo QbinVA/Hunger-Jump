@@ -8,6 +8,8 @@ import constantes
 import menuplay
 import sound
 
+print(pygame.__version__)
+
 #Inicializo pygame
 pygame.init()
 
