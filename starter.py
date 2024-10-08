@@ -90,11 +90,11 @@ def main_menu():
         MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
 
         PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/StartButton.png"), pos=(250, 530), 
-                            text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
+                            text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
         OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/Config.png"), pos=(410, 90), 
                             text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
         QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(90, 90), 
-                            text_input="QUIT", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
+                            text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
         pantalla.blit(MENU_TEXT, MENU_RECT)
 
