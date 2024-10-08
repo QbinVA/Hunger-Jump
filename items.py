@@ -1,5 +1,3 @@
-# items.py
-
 import pygame
 import constantes
 import random
