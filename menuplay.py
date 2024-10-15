@@ -20,8 +20,6 @@ def play():
 
     fondo = pygame.image.load("assets/images/fondos/lvl 1.png").convert()
     sueloPasto = pygame.image.load("assets/images/fondos/sueloPasto.png")
-    ramaD = pygame.image.load("assets/images/fondos/ramaDer.png")
-    ramaI = pygame.image.load("assets/images/fondos/ramaIzq.png")
 
     # Carga la imagen que se mostrará al finalizar el tiempo
     imagen_final = pygame.image.load("assets/images/fondos/gameover.jpg").convert()
@@ -29,7 +27,7 @@ def play():
     imagen_final.set_colorkey(constantes.blanco)
 
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
-    boton_pausa_rect = boton_pausa.get_rect(center=(constantes.anchoVentana // 2, 50))
+    boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
 
     # Llama a la función sonido del archivo sound
     sound.sound_lvl_1()
@@ -40,19 +38,14 @@ def play():
     sprites = pygame.sprite.Group()
     ramas = pygame.sprite.Group()
 
-    # Ejemplo de posiciones de las ramas (ajusta según tu diseño)
-    posiciones_ramas = [340, 450]
-
-    # Crea un ítem en cada posición de rama
-    for posicion in posiciones_ramas:
-        alimento = aitems(posicion)
-        sprites.add(alimento)
-
-    # Instanciar ramas y agregarlas al grupo de ramas
-    ramaD = Rama(331, 430, "assets/images/fondos/ramaIzq.png")
-    ramaI = Rama(-10, 320, "assets/images/fondos/ramaDer.png")
-    ramas.add(ramaD, ramaI)
-    sprites.add(ramaD, ramaI)
+    # Añade las ramas alternando entre izquierda y derecha
+    for i in range(10):  # Generar 10 ramas como ejemplo
+        if i % 2 == 0:
+            rama = Rama(-10, 450 - i * 100, "assets/images/fondos/ramaDer.png")  # Rama derecha
+        else:
+            rama = Rama(331, 450 - i * 100, "assets/images/fondos/ramaIzq.png")  # Rama izquierda
+        ramas.add(rama)
+        sprites.add(rama)
 
     jugador = player(ramas)
     sprites.add(jugador)
@@ -77,7 +70,6 @@ def play():
         y += 1
 
         pantalla.blit(sueloPasto, (0, 360))
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -119,8 +111,6 @@ def play():
 
         # Dibuja el suelo y las ramas
         pantalla.blit(sueloPasto, (0, 360 + desplazamiento_y))
-        pantalla.blit(ramaD.image, (ramaD.rect.x, ramaD.rect.y + desplazamiento_y))
-        pantalla.blit(ramaI.image, (ramaI.rect.x, ramaI.rect.y + desplazamiento_y))
 
         # Actualización de sprites
         if not en_pausa:
@@ -161,7 +151,7 @@ def play():
 
         # Mostrar el tiempo restante en pantalla en la esquina superior derecha
         texto_tiempo = fuente.render(tiempo_formateado, True, constantes.blanco)
-        pantalla.blit(texto_tiempo, (constantes.anchoVentana - 80, 10))
+        pantalla.blit(texto_tiempo, (10, 10))
 
         # Actualizar la pantalla
         pygame.display.update()
