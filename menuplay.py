@@ -173,7 +173,7 @@ def play():
         pantalla.blit(texto_tiempo, (10, 10))
 
         # Mostrar la cantidad de ítems recogidos en la parte inferior de la pantalla
-        texto_cantidad = fuente.render(f'Ítems recogidos: {cantidad_items_recogidos}', True, constantes.blanco)
+        texto_cantidad = fuente.render(f'Items: {cantidad_items_recogidos}', True, constantes.blanco)
         pantalla.blit(texto_cantidad, (10, 50))
 
         # Actualizar la pantalla
