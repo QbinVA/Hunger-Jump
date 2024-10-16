@@ -1,10 +1,10 @@
 anchoVentana = 500 # Define el ancho de la ventana
 altoVentana = 750 # Define el alto de la ventana
 
-anchoPersonaje = 100 # Define el ancho del personaje
-altoPersonaje = 200 # Define el alto del personaje
+anchoPersonaje = 60 # Define el ancho del personaje
+altoPersonaje = 100 # Define el alto del personaje
 
-fps = 60 # Define los fps
+fps = 40 # Define los fps
 
 #Declaro colores
 blanco = (255,255,255)
