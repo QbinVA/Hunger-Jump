@@ -3,7 +3,7 @@ import random
 import constantes
 import sound
 from personaje import player
-from items import aitems
+from items import aitems  # Importar los ítems
 from rama import Rama  # Asegúrate de importar la clase Rama
 
 def play():
@@ -39,16 +39,29 @@ def play():
     ramas = pygame.sprite.Group()
 
     # Añade las ramas alternando entre izquierda y derecha
-    for i in range(10):  # Generar 10 ramas como ejemplo
+    for i in range(20):  # Generar 20 ramas como ejemplo
         if i % 2 == 0:
-            rama = Rama(-10, 450 - i * 100, "assets/images/fondos/ramaDer.png")  # Rama derecha
+            rama = Rama(-10, 500 - i * 120, "assets/images/fondos/ramaDer.png")  # Rama derecha
         else:
-            rama = Rama(331, 450 - i * 100, "assets/images/fondos/ramaIzq.png")  # Rama izquierda
+            rama = Rama(331, 500 - i * 120, "assets/images/fondos/ramaIzq.png")  # Rama izquierda
         ramas.add(rama)
         sprites.add(rama)
 
     jugador = player(ramas)
     sprites.add(jugador)
+
+    # Añadir ítems a las ramas (un ítem por rama como máximo)
+    items = pygame.sprite.Group()
+    ramas_con_items = set()  # Para rastrear qué ramas ya tienen un ítem
+    for rama in ramas:
+        if random.randint(0, 1) and rama not in ramas_con_items:  # Probabilidad de 50% y verificar si la rama ya tiene un ítem
+            item = aitems(rama.rect)  # Coloca el ítem en la rama
+            items.add(item)
+            sprites.add(item)
+            ramas_con_items.add(rama)  # Marcar que esta rama ya tiene un ítem
+
+    # Contador para almacenar la cantidad de ítems recogidos
+    cantidad_items_recogidos = 0
 
     # Temporizador
     tiempo_total = 30
@@ -101,6 +114,11 @@ def play():
                 for sprite in sprites:
                     sprite.rect.y += desplazamiento_y
 
+            # Detectar colisiones entre el jugador y los ítems
+            items_colisionados = pygame.sprite.spritecollide(jugador, items, True)
+            for item in items_colisionados:
+                cantidad_items_recogidos += 1  # Incrementa el contador
+
             # Actualiza el temporizador solo si no está en pausa
             if tiempo_restante > 0:
                 tiempo_restante -= 1 / constantes.fps
@@ -151,7 +169,12 @@ def play():
 
         # Mostrar el tiempo restante en pantalla en la esquina superior derecha
         texto_tiempo = fuente.render(tiempo_formateado, True, constantes.blanco)
+    
         pantalla.blit(texto_tiempo, (10, 10))
+
+        # Mostrar la cantidad de ítems recogidos en la parte inferior de la pantalla
+        texto_cantidad = fuente.render(f'Ítems recogidos: {cantidad_items_recogidos}', True, constantes.blanco)
+        pantalla.blit(texto_cantidad, (10, 50))
 
         # Actualizar la pantalla
         pygame.display.update()
