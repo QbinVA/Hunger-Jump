@@ -39,7 +39,7 @@ class aitems(pygame.sprite.Sprite):
 
         # Coordenadas para la posición
         self.rect = pygame.Rect(0, 0, *tamaño)  # Usa el tamaño proporcionado
-        self.rect.x = posicion_rama.x + random.randint(-1, 10)
+        self.rect.x = posicion_rama.x + 20
         self.rect.y = posicion_rama.y - 45
 
         # Verifica si el ítem seleccionado es un video
