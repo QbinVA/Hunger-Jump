@@ -21,6 +21,8 @@ pygame.display.set_icon(icono)
 
 #Fondo del menu
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
+imagen_config = pygame.image.load("assets/images/fondos/menuConfig.png").convert()
+imagen_config = pygame.transform.scale(imagen_config, (constantes.anchoVentana, constantes.altoVentana))
 
 #Fuente
 def get_font(size):
@@ -32,30 +34,53 @@ def jugar():
 
 #Función de la pantalla opciones    
 def options():
-    while True:
-        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
-        pantalla.fill("white")
+        # Llama a la función sonido del archivo sound
+        sound.sound_menu() # Reproduce el soundtrack del primer nivel
 
-        OPTIONS_TEXT = get_font(25).render("This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(200, 300))
-        pantalla.blit(OPTIONS_TEXT, OPTIONS_RECT)
+        while True:
+            pantalla.blit(imagen_config, (0, 0))
 
-        OPTIONS_BACK = Button(image=None, pos=(400, 600), 
-                            text_input="BACK", font=get_font(25), base_color="Black", hovering_color="Green")
+            # Dibujar el titulo en pantalla
+            #pantalla.blit(tituloS, tituloPos)
 
-        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-        OPTIONS_BACK.update(pantalla)
+            # Después de dibujar el fondo, ahora se dibujan los botones y el texto
+            MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
+            MENU_TEXT = get_font(25).render("", True, "#b68f40")
+            MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
 
-        pygame.display.update()
+            PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 200), 
+                                text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
+            OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 350), 
+                                text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
+            LEVEL3_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 500), 
+                                text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(70, 680), 
+                                text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
+
+            pantalla.blit(MENU_TEXT, MENU_RECT)
+
+            for button in [PLAY_BUTTON, OPTIONS_BUTTON, LEVEL3_BUTTON, QUIT_BUTTON]:
+                button.changeColor(MENU_MOUSE_POS)
+                button.update(pantalla)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        jugar()
+                    if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        options()
+                    if LEVEL3_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        options()
+                    if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                        pass
+
+            pygame.display.update()
 
 #Funcion del menu principal
 def main_menu():
