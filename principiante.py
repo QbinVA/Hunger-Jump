@@ -31,9 +31,6 @@ def get_font(size):
 
 def levels_p():
 
-    def back():
-        dificultad.difi()
-
     #Función de la pantalla play
     def jugar():
         menuplay.play() #mando llamar la funcion play del archivo menuplay
@@ -123,5 +120,8 @@ def levels_p():
                         back()
 
             pygame.display.update()
+
+    def back():
+        dificultad.difi()
 
     levels_menu()

@@ -26,6 +26,11 @@ def play():
     imagen_final = pygame.transform.scale(imagen_final, (constantes.anchoVentana, constantes.altoVentana))
     imagen_final.set_colorkey(constantes.blanco)
 
+    # Carga la imagen que se mostrará al recoger todos los ítems
+    imagen_win = pygame.image.load("assets/images/fondos/youwin.jpg").convert()
+    imagen_win = pygame.transform.scale(imagen_win, (constantes.anchoVentana, constantes.altoVentana))
+    imagen_win.set_colorkey(constantes.blanco)
+
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
 
@@ -37,28 +42,34 @@ def play():
     # Grupo de sprites, instanciación del objeto jugador
     sprites = pygame.sprite.Group()
     ramas = pygame.sprite.Group()
+    items = pygame.sprite.Group()  # Aquí se inicializa el grupo de ítems
 
     # Añade las ramas alternando entre izquierda y derecha
-    for i in range(20):  # Generar 20 ramas como ejemplo
+    ramas_con_items = 0  # Inicializa el contador de ramas con ítems
+    items_generados = 0  # Inicializa el contador de ítems generados
+
+    i = 0  # Contador de iteraciones
+    while items_generados < 12:  # Seguimos generando ramas hasta que se generen 12 ítems
         if i % 2 == 0:
             rama = Rama(-10, 500 - i * 120, "assets/images/fondos/ramaDer.png")  # Rama derecha
         else:
             rama = Rama(331, 500 - i * 120, "assets/images/fondos/ramaIzq.png")  # Rama izquierda
+
         ramas.add(rama)
         sprites.add(rama)
 
-    jugador = player(ramas)
-    sprites.add(jugador)
-
-    # Añadir ítems a las ramas (un ítem por rama como máximo)
-    items = pygame.sprite.Group()
-    ramas_con_items = set()  # Para rastrear qué ramas ya tienen un ítem
-    for rama in ramas:
-        if random.randint(0, 1) and rama not in ramas_con_items:  # Probabilidad de 50% y verificar si la rama ya tiene un ítem
+        # Añadir ítem de manera aleatoria, pero asegurando que generemos 12 ítems en total
+        if random.randint(0, 1) == 1 and items_generados < 12:
             item = aitems(rama.rect)  # Coloca el ítem en la rama
             items.add(item)
             sprites.add(item)
-            ramas_con_items.add(rama)  # Marcar que esta rama ya tiene un ítem
+            items_generados += 1  # Incrementa el contador de ítems generados
+            ramas_con_items += 1  # Incrementa el contador de ramas con ítems
+
+        i += 1  # Incrementa el contador del ciclo
+
+    jugador = player(ramas)
+    sprites.add(jugador)
 
     # Contador para almacenar la cantidad de ítems recogidos
     cantidad_items_recogidos = 0
@@ -118,6 +129,12 @@ def play():
             items_colisionados = pygame.sprite.spritecollide(jugador, items, True)
             for item in items_colisionados:
                 cantidad_items_recogidos += 1  # Incrementa el contador
+
+            if cantidad_items_recogidos == 10:
+                pantalla.blit(imagen_win, (0, 0))
+                pygame.display.update()
+                pygame.time.delay(5000)
+                run = False
 
             # Actualiza el temporizador solo si no está en pausa
             if tiempo_restante > 0:
