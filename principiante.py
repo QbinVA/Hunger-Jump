@@ -32,9 +32,6 @@ def get_font(size):
 
 def levels_p():
 
-    def back():
-        dificultad.difi()
-
     #Función de la pantalla play
     def jugar():
         menuplay.play() #mando llamar la funcion play del archivo menuplay
@@ -77,7 +74,7 @@ def levels_p():
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
             LEVEL3_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 500), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(70, 680), 
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
             pantalla.blit(MENU_TEXT, MENU_RECT)
@@ -102,5 +99,8 @@ def levels_p():
                         back()
 
             pygame.display.update()
+
+    def back():
+        dificultad.difi()
 
     levels_menu()

@@ -72,7 +72,7 @@ def difi():
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
             OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/StartButton.png"), pos=(250, 500), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(70, 680), 
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
             pantalla.blit(MENU_TEXT, MENU_RECT)
