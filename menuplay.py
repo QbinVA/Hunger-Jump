@@ -9,7 +9,7 @@ from rama import Rama  # Asegúrate de importar la clase Rama
 def play():
     # Inicializa Pygame
     pygame.init()
-
+  
     # Configura la pantalla
     pantalla = pygame.display.set_mode((constantes.anchoVentana, constantes.altoVentana))
     pygame.display.set_caption('Hungry Jump')

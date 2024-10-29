@@ -59,7 +59,7 @@ class player(pygame.sprite.Sprite):
         self.rect.y += self.velocidad_y
 
         # Verificar si ha subido 400 píxeles
-        if not self.ha_subido_400px and self.rect.y <= constantes.altoVentana - 400:
+        if not self.ha_subido_400px and self.rect.y <= constantes.altoVentana - 300:
             self.ha_subido_400px = True  # Activa la capacidad de salir de los bordes
 
         # Colisiones con las ramas
@@ -73,12 +73,11 @@ class player(pygame.sprite.Sprite):
         else:
             self.en_rama = False
 
-        # Limitar movimiento dentro de la pantalla solo si no ha subido 400 px
-        if not self.ha_subido_400px:
-            if self.rect.left < 0:
-                self.rect.left = 0
-            if self.rect.right > constantes.anchoVentana:
-                self.rect.right = constantes.anchoVentana
+        # Limitar movimiento dentro de la pantalla
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > constantes.anchoVentana:
+            self.rect.right = constantes.anchoVentana
 
         # Asegurarse de que no salga del suelo si no ha subido 400 px
         if not self.ha_subido_400px:
