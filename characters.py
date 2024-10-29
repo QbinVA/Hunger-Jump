@@ -7,9 +7,7 @@ from button import Button
 import constantes
 import menuplay
 import sound
-import starter
-import principiante
-import avanzado
+import ninalvl1
 
 #Inicializo pygame
 pygame.init()
@@ -47,7 +45,7 @@ def characters():
 
     #Función de la pantalla opciones    
     def niña():
-        menuplay.play() #mando llamar la funcion play del archivo menuplay
+        ninalvl1.play() #mando llamar la funcion play del archivo menuplay
 
 
     #Funcion del menu principal
