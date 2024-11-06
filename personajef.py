@@ -1,17 +1,17 @@
 import pygame
 import constantes
 
-class player(pygame.sprite.Sprite):
+class playerf(pygame.sprite.Sprite):
     def __init__(self, ramas):
         super().__init__()
 
         # Carga la imagen del personaje
-        self.imagen_estatica = pygame.image.load('assets/images/personajes/niño0.png').convert_alpha()
+        self.imagen_estatica = pygame.image.load('assets/images/personajes/niña0.png').convert_alpha()
         self.imagen_estatica = pygame.transform.scale(self.imagen_estatica, (constantes.anchoPersonaje, constantes.altoPersonaje))
 
         # Carga las imágenes para las animaciones
-        self.imagen_derecha = pygame.image.load('assets/images/personajes/niño1.png').convert_alpha()
-        self.imagen_izquierda = pygame.image.load('assets/images/personajes/niño1i.png').convert_alpha()
+        self.imagen_derecha = pygame.image.load('assets/images/personajes/niña1.png').convert_alpha()
+        self.imagen_izquierda = pygame.image.load('assets/images/personajes/niña1i.png').convert_alpha()
 
         self.imagen_derecha = pygame.transform.scale(self.imagen_derecha, (constantes.anchoPersonaje, constantes.altoPersonaje))
         self.imagen_izquierda = pygame.transform.scale(self.imagen_izquierda, (constantes.anchoPersonaje, constantes.altoPersonaje))
