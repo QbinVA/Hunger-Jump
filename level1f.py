@@ -60,7 +60,7 @@ def play():
             ramas_con_items += 1
         i += 1
 
-    jugador = player(ramas)
+    jugador = playerf(ramas)
     sprites.add(jugador)
 
     cantidad_items_recogidos = 0
