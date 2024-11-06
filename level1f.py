@@ -81,7 +81,7 @@ def play():
         yRelativa = y % fondo.get_rect().height
         pantalla.blit(fondo, (0, yRelativa - fondo.get_rect().height))
         if yRelativa < constantes.altoVentana:
-            pantalla.blit(fondo, (0, yRelativa))
+            pantalla.blit(fondo, (0, 0))
         y += 1
 
         for event in pygame.event.get():

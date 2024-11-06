@@ -7,11 +7,9 @@ from button import Button
 import constantes
 import menuplay
 import sound
-import starter
-import dificultad
-import characters
+import level1f
 import lvl2
-import characters2
+import level2f
 
 #Inicializo pygame
 pygame.init()
@@ -27,24 +25,33 @@ pygame.display.set_icon(icono)
 #Fondo del menu
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
 
+iNiño = pygame.image.load("assets/images/personajes/niño0.png").convert()
+iNiño = pygame.transform.scale(iNiño, (120, 170))
+iNiño.set_colorkey(constantes.blanco)
+
+iNiña = pygame.image.load("assets/images/personajes/niña0.png").convert()
+iNiña = pygame.transform.scale(iNiña, (120, 170))
+iNiña.set_colorkey(constantes.blanco)
+
+
 #Fuente
 def get_font(size):
     return pygame.font.Font("assets/Font/font.ttf", size)
 
 
-def levels_p():
+def characters():
 
     #Función de la pantalla play
-    def jugar():
-        characters.characters() #mando llamar la funcion play del archivo menuplay
+    def niño():
+        lvl2.play() #mando llamar la funcion play del archivo menuplay
 
     #Función de la pantalla opciones    
-    def jugar2():
-        characters2.characters() #mando llamar la funcion
-        
+    def niña():
+        level2f.play() #mando llamar la funcion play del archivo menuplay
+
 
     #Funcion del menu principal
-    def levels_menu():
+    def characters_menu():
         # Variables para el desplazamiento del fondo
         x = 0  # Posición inicial del fondo
         velocidad_fondo = 1  # Velocidad de desplazamiento del fondo
@@ -61,27 +68,22 @@ def levels_p():
             pantalla.blit(menuBg, (x_relativa - menuBg.get_rect().width, 0))
             pantalla.blit(menuBg, (x_relativa, 0))
 
-            # Dibujar el titulo en pantalla
-            #pantalla.blit(tituloS, tituloPos)
-
             # Después de dibujar el fondo, ahora se dibujan los botones y el texto
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
             MENU_TEXT = get_font(25).render("", True, "#b68f40")
             MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
 
-            PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 200), 
+            PLAY_BUTTON = Button(image=iNiño, pos=(170, 375), 
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 350), 
+            OPTIONS_BUTTON = Button(image=iNiña, pos=(330, 375), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            LEVEL3_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 500), 
-                                text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
+            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(70, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
             pantalla.blit(MENU_TEXT, MENU_RECT)
 
-            for button in [PLAY_BUTTON, OPTIONS_BUTTON, LEVEL3_BUTTON, QUIT_BUTTON]:
+            for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.update(pantalla)
 
@@ -92,17 +94,12 @@ def levels_p():
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        jugar()
+                        niño()
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        jugar2()
-                    if LEVEL3_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        jugar2()
+                        niña()
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        back()
+                        pass
 
             pygame.display.update()
 
-    def back():
-        dificultad.difi()
-
-    levels_menu()
+    characters_menu()
