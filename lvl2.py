@@ -5,11 +5,13 @@ import sound
 from personaje import player
 from items import aitems  # Importar los ítems
 from rama import Rama  # Asegúrate de importar la clase Rama
+from personajef import playerf  # Importar el personaje femenino
 
 def play():
     # Inicializa Pygame
-    pygame.init()
 
+    pygame.init()
+  
     # Configura la pantalla
     pantalla = pygame.display.set_mode((constantes.anchoVentana, constantes.altoVentana))
     pygame.display.set_caption('Hungry Jump')
@@ -19,18 +21,13 @@ def play():
     pygame.display.set_icon(icono)
 
     fondo = pygame.image.load("assets/images/fondos/lvl2r.png").convert()
-    
     sueloPasto = pygame.image.load("assets/images/fondos/suelolvl2.png")
 
-    # Carga la imagen que se mostrará al finalizar el tiempo
+    # Imágenes de estado final del juego
     imagen_final = pygame.image.load("assets/images/fondos/gameover.jpg").convert()
     imagen_final = pygame.transform.scale(imagen_final, (constantes.anchoVentana, constantes.altoVentana))
-    imagen_final.set_colorkey(constantes.blanco)
-
-    # Carga la imagen que se mostrará al recoger todos los ítems
     imagen_win = pygame.image.load("assets/images/fondos/youwin.jpg").convert()
     imagen_win = pygame.transform.scale(imagen_win, (constantes.anchoVentana, constantes.altoVentana))
-    imagen_win.set_colorkey(constantes.blanco)
 
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
@@ -40,61 +37,52 @@ def play():
 
     reloj = pygame.time.Clock()
 
-    # Grupo de sprites, instanciación del objeto jugador
+    # Grupo de sprites e instanciación de jugador
     sprites = pygame.sprite.Group()
     ramas = pygame.sprite.Group()
-    items = pygame.sprite.Group()  # Aquí se inicializa el grupo de ítems
+    items = pygame.sprite.Group()
 
-    # Añade las ramas alternando entre izquierda y derecha
-    ramas_con_items = 0  # Inicializa el contador de ramas con ítems
-    items_generados = 0  # Inicializa el contador de ítems generados
-
-    i = 0  # Contador de iteraciones
-    while items_generados < 12:  # Seguimos generando ramas hasta que se generen 12 ítems
-        if i % 2 == 0:
-            rama = Rama(-10, 500 - i * 120, "assets/images/fondos/ramaDer.png")  # Rama derecha
-        else:
-            rama = Rama(331, 500 - i * 120, "assets/images/fondos/ramaIzq.png")  # Rama izquierda
-
+    # Generación de ramas e ítems
+    ramas_con_items = 0
+    items_generados = 0
+    i = 0
+    while items_generados < 12:
+        x_pos = -10 if i % 2 == 0 else 331
+        rama = Rama(x_pos, 500 - i * 120, "assets/images/fondos/ramaDer.png" if i % 2 == 0 else "assets/images/fondos/ramaIzq.png")
         ramas.add(rama)
         sprites.add(rama)
 
-        # Añadir ítem de manera aleatoria, pero asegurando que generemos 12 ítems en total
         if random.randint(0, 1) == 1 and items_generados < 12:
-            item = aitems(rama.rect)  # Coloca el ítem en la rama
+            item = aitems(rama.rect)
             items.add(item)
             sprites.add(item)
-            items_generados += 1  # Incrementa el contador de ítems generados
-            ramas_con_items += 1  # Incrementa el contador de ramas con ítems
-
-        i += 1  # Incrementa el contador del ciclo
+            items_generados += 1
+            ramas_con_items += 1
+        i += 1
 
     jugador = player(ramas)
     sprites.add(jugador)
 
-    # Contador para almacenar la cantidad de ítems recogidos
     cantidad_items_recogidos = 0
-
-    # Temporizador
     tiempo_total = 30
     tiempo_restante = tiempo_total
     fuente = pygame.font.SysFont(None, 40)
 
     en_pausa = False
-
     run = True
     desplazamiento_y = 0
-    y = 0  # Asegúrate de inicializar 'y' para el desplazamiento del fondo
+    y = 0
+
+    # Posición inicial fija para el suelo
+    suelo_y = 528
 
     while run:
-        # Bucle de fondo en constante movimiento
+        # Fondo en constante movimiento
         yRelativa = y % fondo.get_rect().height
         pantalla.blit(fondo, (0, yRelativa - fondo.get_rect().height))
         if yRelativa < constantes.altoVentana:
-            pantalla.blit(fondo, (0, yRelativa))
+            pantalla.blit(fondo, (0, 0))
         y += 1
-
-        pantalla.blit(sueloPasto, (0, 360))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -106,30 +94,33 @@ def play():
                     print("Pausa:", en_pausa)
 
         if not en_pausa:
-            # Controlar el movimiento del jugador
+            # Control de movimiento del jugador
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_LEFT]:
-                jugador.velocidad_x = -5
-            elif keys[pygame.K_RIGHT]:
-                jugador.velocidad_x = 5
-            else:
-                jugador.velocidad_x = 0
+            jugador.velocidad_x = -5 if keys[pygame.K_LEFT] else 5 if keys[pygame.K_RIGHT] else 0
             
             # Actualiza el personaje
             jugador.update()
 
-            # Desplazamiento en y cuando el jugador sube
+            # Verificar si el jugador ha tocado el margen inferior de la pantalla
+            if jugador.rect.bottom >= constantes.altoVentana:  # Si el personaje cae al fondo de la pantalla
+                pantalla.blit(imagen_final, (0, 0))  # Muestra imagen de Game Over
+                pygame.display.update()
+                pygame.time.delay(3000)  # Pausa breve antes de finalizar
+                run = False  # Finaliza el juego
+
+            # Desplazamiento vertical cuando el jugador sube
             if jugador.rect.top <= constantes.altoVentana // 4:
                 desplazamiento_y = constantes.altoVentana // 4 - jugador.rect.top
-
-                # Mueve todos los sprites hacia abajo cuando el jugador sube
                 for sprite in sprites:
                     sprite.rect.y += desplazamiento_y
 
-            # Detectar colisiones entre el jugador y los ítems
+                # Mueve el suelo hacia abajo con el desplazamiento
+                suelo_y += desplazamiento_y
+
+            # Colisiones entre el jugador y los ítems
             items_colisionados = pygame.sprite.spritecollide(jugador, items, True)
             for item in items_colisionados:
-                cantidad_items_recogidos += 1  # Incrementa el contador
+                cantidad_items_recogidos += 1
 
             if cantidad_items_recogidos == 10:
                 pantalla.blit(imagen_win, (0, 0))
@@ -137,28 +128,25 @@ def play():
                 pygame.time.delay(5000)
                 run = False
 
-            # Actualiza el temporizador solo si no está en pausa
+            # Actualiza el temporizador si no está en pausa
             if tiempo_restante > 0:
                 tiempo_restante -= 1 / constantes.fps
 
-        # Dibujar el fondo ajustado al desplazamiento
-        pantalla.blit(fondo, (0, desplazamiento_y % constantes.altoVentana - constantes.altoVentana))
-        pantalla.blit(fondo, (0, desplazamiento_y % constantes.altoVentana))
-
-        # Dibuja el suelo y las ramas
-        pantalla.blit(sueloPasto, (0, 528 + desplazamiento_y))
+        # Dibujar suelo ajustado a la posición variable
+        if suelo_y < constantes.altoVentana:  # Solo dibuja el suelo si está visible en pantalla
+            pantalla.blit(sueloPasto, (0, suelo_y))
 
         # Actualización de sprites
         if not en_pausa:
             sprites.update()
 
-        # Dibuja al personaje y los sprites en pantalla
+        # Dibuja el personaje y los sprites
         sprites.draw(pantalla)
 
         # Mostrar el botón de pausa
         pantalla.blit(boton_pausa, boton_pausa_rect.topleft)
 
-        # Si está en pausa, dibuja un rectángulo oscuro sobre la pantalla
+        # Si está en pausa, muestra una sombra sobre la pantalla
         if en_pausa:
             sombra = pygame.Surface((constantes.anchoVentana, constantes.altoVentana))
             sombra.set_alpha(128)
@@ -171,33 +159,25 @@ def play():
             texto_rect = texto_pausa.get_rect(center=(constantes.anchoVentana // 2, constantes.altoVentana // 2))
             pantalla.blit(texto_pausa, texto_rect)
 
-        # Si el temporizador llega a cero, muestra la pantalla de Game Over
+        # Muestra pantalla de Game Over si el tiempo se acaba
         if tiempo_restante <= 0:
             pantalla.blit(imagen_final, (0, 0))
             pygame.display.update()
             pygame.time.delay(5000)
             run = False
 
-        # Calcular minutos y segundos
-        minutos = int(tiempo_restante // 60)
-        segundos = int(tiempo_restante % 60)
-
-        # Formatear el tiempo como MM:SS
+        # Formato del tiempo restante
+        minutos, segundos = divmod(int(tiempo_restante), 60)
         tiempo_formateado = f'{minutos:02}:{segundos:02}'
-
-        # Mostrar el tiempo restante en pantalla en la esquina superior derecha
         texto_tiempo = fuente.render(tiempo_formateado, True, constantes.blanco)
-    
         pantalla.blit(texto_tiempo, (10, 10))
 
-        # Mostrar la cantidad de ítems recogidos en la parte inferior de la pantalla
+        # Mostrar la cantidad de ítems recogidos
         texto_cantidad = fuente.render(f'Items: {cantidad_items_recogidos}', True, constantes.blanco)
         pantalla.blit(texto_cantidad, (10, 50))
 
-        # Actualizar la pantalla
+        # Actualizar pantalla y controlar frame rate
         pygame.display.update()
-
-        # Controlar el frame rate
         reloj.tick(constantes.fps)
 
     pygame.quit()

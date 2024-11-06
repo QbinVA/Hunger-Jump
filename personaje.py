@@ -89,8 +89,3 @@ class player(pygame.sprite.Sprite):
         # Verificar si el jugador cae por debajo del margen inferior de la pantalla
         if self.ha_subido_400px and self.rect.top > constantes.altoVentana:
             self.kill()  # Elimina al jugador para que pierda el nivel
-            self.activar_pantalla_perder()  # Llama a la función para activar la pantalla de pérdida
-
-    def activar_pantalla_perder(self):
-        # Aquí se activaría la pantalla de pérdida
-        print("Pantalla de pérdida activada")  # Reemplaza esto con la lógica de tu pantalla de pérdida
