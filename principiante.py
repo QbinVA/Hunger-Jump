@@ -27,6 +27,16 @@ pygame.display.set_icon(icono)
 #Fondo del menu
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
 
+btnLevel1 = pygame.image.load("assets/images/menu/btnlevel1.png")
+btnLevel1 = pygame.transform.scale(btnLevel1, (250, 150))
+
+btnLevel2 = pygame.image.load("assets/images/menu/btnlevel2.png")
+btnLevel2 = pygame.transform.scale(btnLevel2, (250, 150))
+
+btnLevel3 = pygame.image.load("assets/images/menu/btnlevel3.png")
+btnLevel3 = pygame.transform.scale(btnLevel3, (250, 150))
+
+
 #Fuente
 def get_font(size):
     return pygame.font.Font("assets/Font/font.ttf", size)
@@ -40,6 +50,9 @@ def levels_p():
 
     #Función de la pantalla opciones    
     def jugar2():
+        characters2.characters() #mando llamar la funcion
+
+    def jugar3():
         characters2.characters() #mando llamar la funcion
         
 
@@ -70,11 +83,11 @@ def levels_p():
             MENU_TEXT = get_font(25).render("", True, "#b68f40")
             MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
 
-            PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 200), 
+            PLAY_BUTTON = Button(image=btnLevel1, pos=(250, 200), 
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 350), 
+            OPTIONS_BUTTON = Button(image=btnLevel2, pos=(250, 350), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            LEVEL3_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 500), 
+            LEVEL3_BUTTON = Button(image=btnLevel3, pos=(250, 500), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
             QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
@@ -96,7 +109,7 @@ def levels_p():
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                         jugar2()
                     if LEVEL3_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        jugar2()
+                        jugar3()
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         back()
 
