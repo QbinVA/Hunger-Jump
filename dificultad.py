@@ -25,6 +25,12 @@ pygame.display.set_icon(icono)
 #Fondo del menu
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
 
+btnPrincipiante = pygame.image.load("assets/images/menu/btnprincipiante.png")
+btnPrincipiante = pygame.transform.scale(btnPrincipiante, (300, 175))
+
+btnAvanzado = pygame.image.load("assets/images/menu/btnavanzado.png")
+btnAvanzado = pygame.transform.scale(btnAvanzado, (300, 175))
+
 #Fuente
 def get_font(size):
     return pygame.font.Font("assets/Font/font.ttf", size)
@@ -68,9 +74,9 @@ def difi():
             MENU_TEXT = get_font(25).render("", True, "#b68f40")
             MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
 
-            PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/StartButton.png"), pos=(250, 250), 
+            PLAY_BUTTON = Button(image=btnPrincipiante, pos=(250, 300), 
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/StartButton.png"), pos=(250, 500), 
+            OPTIONS_BUTTON = Button(image=btnAvanzado, pos=(250, 450), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
             QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
