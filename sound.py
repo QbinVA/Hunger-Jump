@@ -14,7 +14,7 @@ def sound_menu():
 
 def sound_item():
     item_sound = pygame.mixer.Sound('assets/audio/itemsaludable.mp3')  # Cargar el sonido
-    item_sound.set_volume(0.4)  # Ajustar volumen
+    item_sound.set_volume(0.7)  # Ajustar volumen
     item_sound.play()  # Reproducir el sonido
 
 def sound_jump():
