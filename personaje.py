@@ -1,5 +1,6 @@
 import pygame
 import constantes
+import sound  # Asegúrate de importar el archivo de sonido
 
 class player(pygame.sprite.Sprite):
     def __init__(self, ramas):
@@ -53,6 +54,7 @@ class player(pygame.sprite.Sprite):
         if (teclas[pygame.K_SPACE] or teclas[pygame.K_UP]) and self.puede_saltar:
             self.velocidad_y = self.fuerza_salto
             self.puede_saltar = False  # Desactivar salto hasta que toque el suelo o la rama
+            sound.sound_jump()  # Reproducir el sonido del salto
 
         # Aplica gravedad
         self.velocidad_y += self.gravedad
