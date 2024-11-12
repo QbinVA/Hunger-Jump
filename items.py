@@ -2,6 +2,7 @@ import pygame
 import random
 import cv2
 import numpy as np
+from sound import sound_item  # Asegúrate de que el archivo de sonidos esté correctamente importado
 
 class aitems(pygame.sprite.Sprite):
     def __init__(self, posicion_rama, tamaño=(50, 50)):
@@ -99,3 +100,7 @@ class aitems(pygame.sprite.Sprite):
         """Libera el recurso de video cuando ya no se necesita."""
         if self.video:
             self.video.release()
+
+    def reproducir_sonido(self):
+        """Reproduce el sonido cuando se recolecta el ítem."""
+        sound_item()  # Llama a la función que reproduce el sonido del ítem

@@ -91,8 +91,12 @@ def play():
                 if game_over or victory:
                     if boton_reintentar_rect.collidepoint(mouse_pos):
                         play()  # Reiniciar el juego
+                        sound.sound_clic2()  # Reproducir sonido de clic
                     elif boton_salir_rect.collidepoint(mouse_pos):
-                        run = False
+                        sound.sound_clic1()  # Reproducir sonido de clic
+                        from principiante import levels_p  # Importa solo cuando es necesario
+                        levels_p()  # Llama a la pantalla de selección de niveles
+                        return  # Salir de la función play actual
 
         if not en_pausa and not game_over and not victory:
             # Control de movimiento del jugador
@@ -117,9 +121,11 @@ def play():
             items_colisionados = pygame.sprite.spritecollide(jugador, items, True)
             for item in items_colisionados:
                 cantidad_items_recogidos += 1
+                item.reproducir_sonido()
 
             if cantidad_items_recogidos == 10:
                 victory = True
+                sound.sound_win1()
 
             if tiempo_restante > 0:
                 tiempo_restante -= 1 / constantes.fps

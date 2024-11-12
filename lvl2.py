@@ -92,7 +92,9 @@ def play():
                     if boton_reintentar_rect.collidepoint(mouse_pos):
                         play()  # Reiniciar el juego
                     elif boton_salir_rect.collidepoint(mouse_pos):
-                        run = False
+                        from principiante import levels_p  # Importa solo cuando es necesario
+                        levels_p()  # Llama a la pantalla de selección de niveles
+                        return  # Salir de la función play actual
 
         if not en_pausa and not game_over and not victory:
             # Control de movimiento del jugador
