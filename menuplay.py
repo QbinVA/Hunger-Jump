@@ -90,8 +90,8 @@ def play():
                 # Manejo de los botones en la pantalla de Game Over o Victoria
                 if game_over or victory:
                     if boton_reintentar_rect.collidepoint(mouse_pos):
-                        play()  # Reiniciar el juego
                         sound.sound_clic2()  # Reproducir sonido de clic
+                        play()  # Reiniciar el juego
                     elif boton_salir_rect.collidepoint(mouse_pos):
                         sound.sound_clic1()  # Reproducir sonido de clic
                         from principiante import levels_p  # Importa solo cuando es necesario
