@@ -9,7 +9,6 @@ from personajef import playerf  # Importar el personaje femenino
 
 def play():
     # Inicializa Pygame
-
     pygame.init()
   
     # Configura la pantalla
@@ -21,13 +20,7 @@ def play():
     pygame.display.set_icon(icono)
 
     fondo = pygame.image.load("assets/images/fondos/lvl2r.png").convert()
-    sueloPasto = pygame.image.load("assets/images/fondos/suelolvl2.png")
-
-    # Imágenes de estado final del juego
-    imagen_final = pygame.image.load("assets/images/fondos/gameover.jpg").convert()
-    imagen_final = pygame.transform.scale(imagen_final, (constantes.anchoVentana, constantes.altoVentana))
-    imagen_win = pygame.image.load("assets/images/fondos/youwin.jpg").convert()
-    imagen_win = pygame.transform.scale(imagen_win, (constantes.anchoVentana, constantes.altoVentana))
+    sueloPasto = pygame.image.load("assets/images/fondos/Slvl2.png")
 
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
@@ -69,12 +62,14 @@ def play():
     fuente = pygame.font.SysFont(None, 40)
 
     en_pausa = False
+    game_over = False
+    victory = False
     run = True
     desplazamiento_y = 0
     y = 0
 
     # Posición inicial fija para el suelo
-    suelo_y = 528
+    suelo_y = 360
 
     while run:
         # Fondo en constante movimiento
@@ -91,9 +86,15 @@ def play():
                 mouse_pos = pygame.mouse.get_pos()
                 if boton_pausa_rect.collidepoint(mouse_pos):
                     en_pausa = not en_pausa
-                    print("Pausa:", en_pausa)
+                
+                # Manejo de los botones en la pantalla de Game Over o Victoria
+                if game_over or victory:
+                    if boton_reintentar_rect.collidepoint(mouse_pos):
+                        play()  # Reiniciar el juego
+                    elif boton_salir_rect.collidepoint(mouse_pos):
+                        run = False
 
-        if not en_pausa:
+        if not en_pausa and not game_over and not victory:
             # Control de movimiento del jugador
             keys = pygame.key.get_pressed()
             jugador.velocidad_x = -5 if keys[pygame.K_LEFT] else 5 if keys[pygame.K_RIGHT] else 0
@@ -102,19 +103,14 @@ def play():
             jugador.update()
 
             # Verificar si el jugador ha tocado el margen inferior de la pantalla
-            if jugador.rect.bottom >= constantes.altoVentana:  # Si el personaje cae al fondo de la pantalla
-                pantalla.blit(imagen_final, (0, 0))  # Muestra imagen de Game Over
-                pygame.display.update()
-                pygame.time.delay(3000)  # Pausa breve antes de finalizar
-                run = False  # Finaliza el juego
+            if jugador.rect.bottom >= constantes.altoVentana:
+                game_over = True
 
             # Desplazamiento vertical cuando el jugador sube
             if jugador.rect.top <= constantes.altoVentana // 4:
                 desplazamiento_y = constantes.altoVentana // 4 - jugador.rect.top
                 for sprite in sprites:
                     sprite.rect.y += desplazamiento_y
-
-                # Mueve el suelo hacia abajo con el desplazamiento
                 suelo_y += desplazamiento_y
 
             # Colisiones entre el jugador y los ítems
@@ -123,65 +119,68 @@ def play():
                 cantidad_items_recogidos += 1
 
             if cantidad_items_recogidos == 10:
-                pantalla.blit(imagen_win, (0, 0))
-                pygame.display.update()
-                pygame.time.delay(5000)
-                run = False
+                victory = True
 
-            # Actualiza el temporizador si no está en pausa
             if tiempo_restante > 0:
                 tiempo_restante -= 1 / constantes.fps
 
         # Dibujar suelo ajustado a la posición variable
-        if suelo_y < constantes.altoVentana:  # Solo dibuja el suelo si está visible en pantalla
-            pantalla.blit(sueloPasto, (0, suelo_y))
+        if suelo_y < constantes.altoVentana:
+            pantalla.blit(sueloPasto, (0, 165 + suelo_y))
 
         # Actualización de sprites
         if not en_pausa:
             sprites.update()
 
-        # Dibuja el personaje y los sprites
         sprites.draw(pantalla)
-
-        # Mostrar el botón de pausa
         pantalla.blit(boton_pausa, boton_pausa_rect.topleft)
 
-        # Si está en pausa, muestra una sombra sobre la pantalla
+        # Oscurecer pantalla y mostrar mensaje de pausa si está en pausa
         if en_pausa:
             sombra = pygame.Surface((constantes.anchoVentana, constantes.altoVentana))
             sombra.set_alpha(128)
             sombra.fill((0, 0, 0))
             pantalla.blit(sombra, (0, 0))
+            texto_pausa = fuente.render("Pausa", True, constantes.blanco)
+            pantalla.blit(texto_pausa, texto_pausa.get_rect(center=(constantes.anchoVentana // 2, constantes.altoVentana // 2)))
 
-            # Mostrar mensaje de pausa
-            fuente_pausa = pygame.font.SysFont(None, 75)
-            texto_pausa = fuente_pausa.render('PAUSA', True, constantes.blanco)
-            texto_rect = texto_pausa.get_rect(center=(constantes.anchoVentana // 2, constantes.altoVentana // 2))
-            pantalla.blit(texto_pausa, texto_rect)
+        # Pantalla de Game Over o Victoria
+        if game_over or victory:
+            sombra = pygame.Surface((constantes.anchoVentana, constantes.altoVentana))
+            sombra.set_alpha(128)
+            sombra.fill((0, 0, 0))
+            pantalla.blit(sombra, (0, 0))
 
-        # Muestra pantalla de Game Over si el tiempo se acaba
-        if tiempo_restante <= 0:
-            pantalla.blit(imagen_final, (0, 0))
-            pygame.display.update()
-            pygame.time.delay(5000)
-            run = False
+            fuente_final = pygame.font.SysFont(None, 75)
+            texto_final = fuente_final.render('¡Ganaste!' if victory else '¡Perdiste!', True, constantes.blanco)
+            pantalla.blit(texto_final, texto_final.get_rect(center=(constantes.anchoVentana // 2, constantes.altoVentana // 2 - 50)))
 
-        # Formato del tiempo restante
+            # Crear y mostrar botones de reintentar y salir
+            boton_reintentar = pygame.Surface((165, 50))
+            boton_reintentar.fill((255, 0, 0))
+            boton_reintentar_rect = boton_reintentar.get_rect(center=(constantes.anchoVentana // 2 - 100, constantes.altoVentana // 2 + 50))
+            pantalla.blit(boton_reintentar, boton_reintentar_rect)
+            pantalla.blit(fuente.render('Reintentar', True, constantes.blanco), (boton_reintentar_rect.x + 10, boton_reintentar_rect.y + 10))
+
+            boton_salir = pygame.Surface((165, 50))
+            boton_salir.fill((255, 0, 0))
+            boton_salir_rect = boton_salir.get_rect(center=(constantes.anchoVentana // 2 + 100, constantes.altoVentana // 2 + 50))
+            pantalla.blit(boton_salir, boton_salir_rect)
+            pantalla.blit(fuente.render('Salir', True, constantes.blanco), (boton_salir_rect.x + 35, boton_salir_rect.y + 10))
+
         minutos, segundos = divmod(int(tiempo_restante), 60)
         tiempo_formateado = f'{minutos:02}:{segundos:02}'
         texto_tiempo = fuente.render(tiempo_formateado, True, constantes.blanco)
         pantalla.blit(texto_tiempo, (10, 10))
 
-        # Mostrar la cantidad de ítems recogidos
         texto_cantidad = fuente.render(f'Items: {cantidad_items_recogidos}', True, constantes.blanco)
         pantalla.blit(texto_cantidad, (10, 50))
 
-        # Actualizar pantalla y controlar frame rate
         pygame.display.update()
         reloj.tick(constantes.fps)
 
     pygame.quit()
 
-# Ejecutar el juego
 if __name__ == "__main__":
     play()
+ 
