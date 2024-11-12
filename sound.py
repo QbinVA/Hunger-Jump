@@ -10,7 +10,7 @@ def sound_lvl_1():
 def sound_menu():
     pygame.mixer.music.load('assets/audio/backgroundsong.mp3') # Importo el audio
     pygame.mixer.music.play(-1) # Sirve para reproducir la música en bucle infinito
-    pygame.mixer.music.set_volume(0.3) # Controla el volumen (el valor máximo es 1 y el valor mínimo 0.0)
+    pygame.mixer.music.set_volume(0.7) # Controla el volumen (el valor máximo es 1 y el valor mínimo 0.0)
 
 def sound_item():
     item_sound = pygame.mixer.Sound('assets/audio/itemsaludable.mp3')  # Cargar el sonido

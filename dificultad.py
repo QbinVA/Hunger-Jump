@@ -38,6 +38,9 @@ def get_font(size):
 
 def difi():
 
+    sound.sound_menu() # Reproduce el soundtrack del primer nivel
+
+
     def back():
         starter.main_menu()
 
@@ -57,7 +60,6 @@ def difi():
         velocidad_fondo = 1  # Velocidad de desplazamiento del fondo
 
         # Llama a la función sonido del archivo sound
-        sound.sound_menu() # Reproduce el soundtrack del primer nivel
 
         while True:
             # Desplazamiento horizontal del fondo
