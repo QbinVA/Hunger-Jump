@@ -17,7 +17,7 @@ class BaseItem(pygame.sprite.Sprite):
         self.frame_interval = 250
 
         self.rect = pygame.Rect(0, 0, *tamaño)
-        self.rect.x = posicion_rama.x + 20
+        self.rect.x = posicion_rama.x + random.randint(20, 70) # Posición estándar para ramas izquierdas
         self.rect.y = posicion_rama.y - 45
 
         if self.item_seleccionado.endswith('.mp4'):

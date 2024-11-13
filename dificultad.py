@@ -5,8 +5,6 @@ import pygame.display
 from pygame.locals import *
 from button import Button
 import sound
-import starter
-import principiante
 import avanzado
 
 #Inicializo pygame
@@ -29,6 +27,9 @@ btnPrincipiante = pygame.transform.scale(btnPrincipiante, (300, 175))
 btnAvanzado = pygame.image.load("assets/images/menu/btnavanzado.png")
 btnAvanzado = pygame.transform.scale(btnAvanzado, (300, 175))
 
+backArrow = pygame.image.load("assets/images/menu/backArrow.png")
+backArrow = pygame.transform.scale(backArrow, (230, 160))
+
 #Fuente
 def get_font(size):
     return pygame.font.Font("assets/Font/font.ttf", size)
@@ -40,15 +41,18 @@ def difi():
 
 
     def back():
-        starter.main_menu()
+        from starter import main_menu
+        main_menu()
 
     #Función de la pantalla play
     def jugar():
-        principiante.levels_p() #mando llamar la funcion play del archivo menuplay
+        from principiante import levels_p
+        levels_p() #mando llamar la funcion play del archivo menuplay
 
     #Función de la pantalla opciones    
     def options():
-        principiante.levels_p() #mando llamar la funcion play del archivo menuplay
+        from principiante import levels_p
+        levels_p() #mando llamar la funcion play del archivo menuplay
 
 
     #Funcion del menu principal
@@ -78,7 +82,7 @@ def difi():
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
             OPTIONS_BUTTON = Button(image=btnAvanzado, pos=(250, 450), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
+            QUIT_BUTTON = Button(image=backArrow, pos=(95, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
             pantalla.blit(MENU_TEXT, MENU_RECT)

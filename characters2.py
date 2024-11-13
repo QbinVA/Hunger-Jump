@@ -5,11 +5,7 @@ import pygame.display
 from pygame.locals import *
 from button import Button
 import constantes
-import menuplay
 import sound
-import level1f
-import lvl2
-import level2f
 
 #Inicializo pygame
 pygame.init()
@@ -33,6 +29,9 @@ iNiña = pygame.image.load("assets/images/personajes/niña0.png").convert()
 iNiña = pygame.transform.scale(iNiña, (120, 170))
 iNiña.set_colorkey(constantes.blanco)
 
+backArrow = pygame.image.load("assets/images/menu/backArrow.png")
+backArrow = pygame.transform.scale(backArrow, (230, 160))
+
 
 #Fuente
 def get_font(size):
@@ -43,11 +42,17 @@ def characters():
 
     #Función de la pantalla play
     def niño():
-        lvl2.play() #mando llamar la funcion play del archivo menuplay
+        from lvl2 import play
+        play() #mando llamar la funcion play del archivo menuplay
 
     #Función de la pantalla opciones    
     def niña():
-        level2f.play() #mando llamar la funcion play del archivo menuplay
+        from level2f import play
+        play() #mando llamar la funcion play del archivo menuplay
+
+    def back():
+        from principiante import levels_p
+        levels_p()
 
 
     #Funcion del menu principal
@@ -78,7 +83,7 @@ def characters():
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
             OPTIONS_BUTTON = Button(image=iNiña, pos=(330, 375), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(70, 680), 
+            QUIT_BUTTON = Button(image=backArrow, pos=(95, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
             pantalla.blit(MENU_TEXT, MENU_RECT)
@@ -98,7 +103,7 @@ def characters():
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
                         niña()
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        pass
+                        back()
 
             pygame.display.update()
 
