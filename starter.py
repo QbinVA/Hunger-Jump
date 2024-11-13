@@ -29,6 +29,8 @@ def get_font(size):
 
 #Función de la pantalla play
 def jugar():
+    import sound
+    sound.sound_clic2() # Reproduce el sonido del botón
     from dificultad import difi
     difi() #mando llamar la funcion play del archivo menuplay
 

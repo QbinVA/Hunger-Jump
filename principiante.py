@@ -44,19 +44,27 @@ def levels_p():
 
     #Función de la pantalla play
     def jugar():
+        from sound import sound_clic2
+        sound_clic2() # Reproduce el sonido del botón
         from characters import characters
         characters() #mando llamar la funcion play del archivo menuplay
 
     #Función de la pantalla opciones    
     def jugar2():
+        from sound import sound_clic2
+        sound_clic2() # Reproduce el sonido del botón
         from characters2 import characters
         characters() #mando llamar la funcion
 
     def jugar3():
+        from sound import sound_clic2
+        sound_clic2() # Reproduce el sonido del botón
         from characters2 import characters
         characters() #mando llamar la funcion
 
     def back():
+        from sound import sound_clic1
+        sound_clic1() # Reproduce el sonido del botón
         from dificultad import difi
         difi()
         
