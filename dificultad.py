@@ -4,8 +4,6 @@ import pygame, sys
 import pygame.display
 from pygame.locals import *
 from button import Button
-import constantes
-import menuplay
 import sound
 import starter
 import principiante

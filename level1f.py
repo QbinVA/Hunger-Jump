@@ -3,7 +3,7 @@ import random
 import constantes
 import sound
 from personaje import player
-from items import aitems  # Importar los ítems
+from items import SaludableItem, ChatarraItem  # Importar las clases de ítems saludables y chatarra
 from rama import Rama  # Asegúrate de importar la clase Rama
 from personajef import playerf  # Importar el personaje femenino
 
@@ -46,7 +46,12 @@ def play():
         sprites.add(rama)
 
         if random.randint(0, 1) == 1 and items_generados < 12:
-            item = aitems(rama.rect)
+            # Selecciona aleatoriamente entre un ítem saludable o de chatarra
+            if random.choice([True, False]):
+                item = SaludableItem(rama.rect)
+            else:
+                item = ChatarraItem(rama.rect)
+            
             items.add(item)
             sprites.add(item)
             items_generados += 1
@@ -189,4 +194,3 @@ def play():
 
 if __name__ == "__main__":
     play()
- 
