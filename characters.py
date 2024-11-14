@@ -42,15 +42,21 @@ def characters():
 
     #Función de la pantalla play
     def niño():
+        from sound import sound_clic2
+        sound_clic2() # Reproduce el sonido del botón
         from menuplay import play
         play() #mando llamar la funcion play del archivo menuplay
 
     #Función de la pantalla opciones    
     def niña():
+        from sound import sound_clic2
+        sound_clic2() # Reproduce el sonido del botón
         from level1f import play
         play() #mando llamar la funcion play del archivo menuplay
 
     def back():
+        from sound import sound_clic1
+        sound_clic1() # Reproduce el sonido del botón
         from principiante import levels_p
         levels_p()
 
