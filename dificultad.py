@@ -48,17 +48,17 @@ def difi():
 
     #Función de la pantalla play
     def jugar():
-        from sound import sound_clic2
-        sound_clic2() # Reproduce el sonido del botón
+        from sound import sound_Button
+        sound_Button() # Reproduce el sonido del botón
         from principiante import levels_p
-        levels_p() #mando llamar la funcion play del archivo menuplay
+        levels_p() #mando llamar la funcion play del archivo principiante
 
     #Función de la pantalla opciones    
     def options():
-        from sound import sound_clic2
-        sound_clic2() # Reproduce el sonido del botón
+        from sound import sound_Button
+        sound_Button() # Reproduce el sonido del botón
         from principiante import levels_p
-        levels_p() #mando llamar la funcion play del archivo menuplay
+        levels_p() #mando llamar la funcion play del archivo avanzado
 
 
     #Funcion del menu principal
