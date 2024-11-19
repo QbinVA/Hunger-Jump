@@ -99,7 +99,10 @@ def main_menu():
     tuerca = pygame.transform.scale(tuerca, (110, 110))
 
     bPlay = pygame.image.load("assets/images/menu/StartButton.png")
-    bPlay = pygame.transform.scale(bPlay, (350, 225))
+    bPlay = pygame.transform.scale(bPlay, (300, 180))
+
+    bPlaySelected = pygame.image.load("assets/images/menu/StartSelected.png")
+    bPlaySelected = pygame.transform.scale(bPlaySelected, (350, 225))
 
     # Llama a la función sonido del archivo sound
     sound.sound_menu() # Reproduce el soundtrack del primer nivel
@@ -122,8 +125,14 @@ def main_menu():
         MENU_TEXT = get_font(25).render("", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
 
-        PLAY_BUTTON = Button(image=bPlay, pos=(250, 530), 
-                            text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
+        # Cambiar imagen del botón de play según hover
+        if 50 < MENU_MOUSE_POS[0] < 400 and 410 < MENU_MOUSE_POS[1] < 630:  # Ajustar las coordenadas según el botón
+            PLAY_BUTTON = Button(image=bPlaySelected, pos=(250, 530), 
+                                text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
+        else:
+            PLAY_BUTTON = Button(image=bPlay, pos=(250, 530), 
+                                text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
+
         OPTIONS_BUTTON = Button(image=tuerca, pos=(435, 65), 
                             text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
         QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 90), 
