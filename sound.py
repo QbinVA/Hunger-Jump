@@ -41,3 +41,8 @@ def sound_Button():
     clic_sound = pygame.mixer.Sound('assets/audio/sonidoBtn.mp3')  # Cargar el sonido
     clic_sound.set_volume(0.8)  # Ajustar volumen
     clic_sound.play()  # Reproducir el sonido
+
+def sound_game_over():
+    pygame.mixer.music.load('assets/audio/gameover.mp3')  # Cargar el sonido
+    pygame.mixer.music.set_volume(0.8)  # Ajustar volumen
+    pygame.mixer.music.play()  # Reproducir el sonido
