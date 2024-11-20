@@ -22,7 +22,7 @@ def render_text_with_outline(font, text, text_color, outline_color, position, su
 
 def play():
     # Define la cantidad de ítems necesarios para ganar
-    OBJETIVO_ITEMS = 12
+    OBJETIVO_ITEMS = 20
 
     # Inicializa Pygame
     pygame.init()
@@ -41,6 +41,12 @@ def play():
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
 
+    # Carga de imágenes para los botones
+    boton_reintentar_image = pygame.image.load("assets/images/menu/reiniciar.png").convert_alpha()
+    boton_salir_image = pygame.image.load("assets/images/menu/home.png").convert_alpha()
+    boton_reintentar_rect = boton_reintentar_image.get_rect(center=(constantes.anchoVentana // 2, 270))
+    boton_salir_rect = boton_salir_image.get_rect(center=(constantes.anchoVentana // 2, 500))
+
     # Llama a la función sonido del archivo sound
     sound.sound_lvl_1()
 
@@ -51,11 +57,9 @@ def play():
     ramas = pygame.sprite.Group()
     items = pygame.sprite.Group()
 
-    # Instancia inicial de las ramas y los ítems
+    # Generación de ramas e ítems
     items_generados = 0
     i = 0
-
-    # Generación continua de ramas e ítems hasta que se alcance el objetivo de ítems
     while items_generados < OBJETIVO_ITEMS:
         x_pos = -10 if i % 2 == 0 else 331
         rama = Rama(
@@ -66,14 +70,17 @@ def play():
         ramas.add(rama)
         sprites.add(rama)
 
-        # Generar ítems aleatorios (saludables o chatarras)
+        # Generar ítem con mayor probabilidad de ser saludable
         if random.randint(0, 1) == 1:
-            item = SaludableItem(rama.rect) if random.choice([True, False]) else ChatarraItem(rama.rect)
+            if random.randint(0, 9) < 7:  # 70% probabilidad de ítem saludable
+                item = SaludableItem(rama.rect)
+            else:  # 30% probabilidad de ítem chatarra
+                item = ChatarraItem(rama.rect)
             items.add(item)
             sprites.add(item)
-            items_generados += 1  # Incrementa el contador de ítems generados
+            items_generados += 1
 
-        i += 1  # Aumenta el índice para continuar generando nuevas ramas
+        i += 1
 
     jugador = player(ramas)
     sprites.add(jugador)
@@ -118,30 +125,32 @@ def play():
             keys = pygame.key.get_pressed()
             jugador.velocidad_x = -5 if keys[pygame.K_LEFT] else 5 if keys[pygame.K_RIGHT] else 0
             jugador.update()
+
             if jugador.rect.bottom >= constantes.altoVentana:
+                if not game_over:
+                    sound.sound_game_over()
                 game_over = True
-                sound.sound_game_over()
-                
+
             if jugador.rect.top <= constantes.altoVentana // 4:
                 desplazamiento_y = constantes.altoVentana // 4 - jugador.rect.top
                 for sprite in sprites:
                     sprite.rect.y += desplazamiento_y
                 suelo_y += desplazamiento_y
+
             items_colisionados = pygame.sprite.spritecollide(jugador, items, True)
             for item in items_colisionados:
                 item.reproducir_sonido()
-                if isinstance(item, SaludableItem):  # Solo cuenta los ítems saludables
+                if isinstance(item, SaludableItem):
                     cantidad_items_recogidos += 1
-                    tiempo_restante += 1  # Aumenta el tiempo al recoger un ítem saludable
+                    tiempo_restante += 1
                     if tiempo_restante > tiempo_total:
                         tiempo_restante = tiempo_total
-                elif isinstance(item, ChatarraItem):  # Penaliza al recoger ítems chatarra
+                elif isinstance(item, ChatarraItem):
                     tiempo_restante -= 4
                     if tiempo_restante < 0:
                         tiempo_restante = 0
 
-            # Verifica si se alcanza la cantidad objetivo de ítems saludables
-            if cantidad_items_recogidos == 5:
+            if cantidad_items_recogidos == 10:
                 victory = True
                 sound.sound_win1()
 
@@ -149,10 +158,9 @@ def play():
                 tiempo_restante -= 1 / constantes.fps
             else:
                 tiempo_restante = 0
-                if not victory:
-                    game_over = True
+                if not victory and not game_over:
                     sound.sound_game_over()
-
+                game_over = True
 
         if suelo_y < constantes.altoVentana:
             pantalla.blit(sueloPasto, (0, suelo_y))
@@ -167,30 +175,17 @@ def play():
                 '¡Sigue comiendo bien!' if victory else '¡Trata de comer mejor!',
                 constantes.blanco,
                 constantes.negro,
-                (constantes.anchoVentana // 2 - 200, constantes.altoVentana // 2 - 50),
+                (constantes.anchoVentana // 2 - 225, 30),
                 pantalla
             )
-            boton_reintentar = pygame.Surface((165, 50))
-            boton_reintentar.fill((0, 255, 0))
-            boton_reintentar_rect = boton_reintentar.get_rect(center=(constantes.anchoVentana // 2 - 100, constantes.altoVentana // 2 + 50))
-            pantalla.blit(boton_reintentar, boton_reintentar_rect)
-            pantalla.blit(
-                get_pixel_font(15).render('Reintentar', True, (255, 255, 255)),
-                boton_reintentar_rect.center
-            )
-            boton_salir = pygame.Surface((165, 50))
-            boton_salir.fill((0, 0, 255))
-            boton_salir_rect = boton_salir.get_rect(center=(constantes.anchoVentana // 2 + 100, constantes.altoVentana // 2 + 50))
-            pantalla.blit(boton_salir, boton_salir_rect)
-            pantalla.blit(
-                get_pixel_font(15).render('Salir', True, (255, 255, 255)),
-                boton_salir_rect.center
-            )
+
+            pantalla.blit(boton_reintentar_image, boton_reintentar_rect)
+            pantalla.blit(boton_salir_image, boton_salir_rect)
         else:
             sprites.update()
             sprites.draw(pantalla)
             pantalla.blit(boton_pausa, boton_pausa_rect.topleft)
-            items_recogidos_text = f"{cantidad_items_recogidos}/5"
+            items_recogidos_text = f"{cantidad_items_recogidos}/10"
             render_text_with_outline(
                 get_pixel_font(22),
                 items_recogidos_text,
