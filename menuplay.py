@@ -38,6 +38,17 @@ def play():
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
 
+    pausaSelected = pygame.image.load("assets/images/menu/PausaSelected.png").convert_alpha()
+    pausaSelected = pygame.transform.scale(pausaSelected, (200, 200))
+    pausaSelected_rect = pausaSelected.get_rect(center=(452, 55))
+
+    boton_reintentar_image = pygame.image.load("assets/images/menu/reiniciar.png").convert_alpha()
+    boton_reintentar_image = pygame.transform.scale(boton_reintentar_image, (100, 100))
+    boton_salir_image = pygame.image.load("assets/images/menu/home.png").convert_alpha()
+    boton_salir_image = pygame.transform.scale(boton_salir_image, (100, 100))
+    boton_reintentar_rect = boton_reintentar_image.get_rect(center=(constantes.anchoVentana // 2, 270))
+    boton_salir_rect = boton_salir_image.get_rect(center=(constantes.anchoVentana // 2, 500))
+
     # Llama a la función sonido del archivo sound
     sound.sound_lvl_1()
 
@@ -77,6 +88,8 @@ def play():
     desplazamiento_y = 0
     y = 0
     suelo_y = 360
+
+    mostrar_instrucciones = False
 
     while run:
         yRelativa = y % fondo.get_rect().height
@@ -178,6 +191,62 @@ def play():
                 (10, 10),
                 pantalla
             )
+
+        # Oscurecer la pantalla si está pausado
+                # Oscurecer la pantalla si está pausado
+        if en_pausa:
+            overlay = pygame.Surface((constantes.anchoVentana, constantes.altoVentana))
+            overlay.set_alpha(128)  # Ajusta el nivel de oscurecimiento
+            overlay.fill((0, 0, 0))  # Color negro
+            pantalla.blit(overlay, (0, 0))
+            render_text_with_outline(
+                get_pixel_font(30),
+                "",
+                constantes.blanco,
+                constantes.negro,
+                (constantes.anchoVentana // 2 - 90, constantes.altoVentana // 2 - 20),
+                pantalla
+            )
+            pantalla.blit(pausaSelected, pausaSelected_rect)
+
+            # Botones de pausa
+            boton_reintentar_rect = boton_reintentar_image.get_rect(center=(constantes.anchoVentana // 2, 230))
+            boton_controles_image = pygame.image.load("assets/images/menu/Control.png").convert_alpha()
+            boton_controles_image = pygame.transform.scale(boton_controles_image, (150, 100))
+            boton_controles_rect = boton_controles_image.get_rect(center=(constantes.anchoVentana // 2, 380))
+            boton_home_image = pygame.image.load("assets/images/menu/home.png").convert_alpha()
+            boton_home_image = pygame.transform.scale(boton_home_image, (100, 100))
+            boton_home_rect = boton_home_image.get_rect(center=(constantes.anchoVentana // 2, 530))
+
+            instrucciones = pygame.image.load("assets/images/menu/instrucciones.png")
+            instrucciones = pygame.transform.scale(instrucciones, (constantes.anchoVentana, constantes.altoVentana))
+
+            pantalla.blit(boton_reintentar_image, boton_reintentar_rect)
+            pantalla.blit(boton_controles_image, boton_controles_rect)
+            pantalla.blit(boton_home_image, boton_home_rect)
+
+            # Detectar clics en los botones de pausa
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+
+                # Acciones según el botón presionado
+                if boton_reintentar_rect.collidepoint(mouse_pos):
+                    sound.sound_clic2()  # Reproducir sonido de clic
+                    play()  # Reiniciar el juego
+                elif boton_controles_rect.collidepoint(mouse_pos):
+                    sound.sound_clic2()  # Reproducir sonido de clic
+                    mostrar_instrucciones = True
+                elif boton_home_rect.collidepoint(mouse_pos):
+                    sound.sound_clic1()  # Reproducir sonido de clic
+                    from avanzado import levels_a  # Ir al menú principal
+                    levels_a()
+                    return
+                
+            if mostrar_instrucciones == True:
+                pantalla.blit(instrucciones, (0, 0))
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
+                        mostrar_instrucciones = False
 
         pygame.display.update()
         reloj.tick(constantes.fps)

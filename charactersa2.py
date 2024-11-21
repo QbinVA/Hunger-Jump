@@ -40,15 +40,15 @@ def characters():
     def niño():
         from sound import sound_clic2
         sound_clic2()  # Reproduce el sonido del botón
-        from instrucciones import instrucciones
+        from instruccionesa2 import instrucciones
         instrucciones()  # Mando llamar la función play del archivo menuplay
 
     # Función de la pantalla opciones    
     def niña():
         from sound import sound_clic2
         sound_clic2()  # Reproduce el sonido del botón
-        from instrucciones import instrucciones
-        instrucciones()  # Mando llamar la función play del archivo menuplay
+        from level1f import play
+        play()  # Mando llamar la función play del archivo menuplay
 
     def back():
         from sound import sound_clic1

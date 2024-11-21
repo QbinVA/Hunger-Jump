@@ -34,8 +34,8 @@ def play():
     # Carga imágenes
     icono = pygame.image.load("assets/images/items/banana0.png")
     pygame.display.set_icon(icono)
-    fondo = pygame.image.load("assets/images/fondos/lvl 1.png").convert()
-    sueloPasto = pygame.image.load("assets/images/fondos/sueloPasto.png")
+    fondo = pygame.image.load("assets/images/fondos/lvl2r.png").convert()
+    sueloPasto = pygame.image.load("assets/images/fondos/Slvl2.png")
     game_over_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
     victory_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
@@ -183,7 +183,7 @@ def play():
             jugador.velocidad_x = 0
 
         if suelo_y < constantes.altoVentana:
-            pantalla.blit(sueloPasto, (0, suelo_y))
+            pantalla.blit(sueloPasto, (0, 165 + suelo_y))
 
         if game_over or victory:
             if game_over:
