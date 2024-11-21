@@ -47,7 +47,7 @@ def characters():
     def niña():
         from sound import sound_clic2
         sound_clic2()  # Reproduce el sonido del botón
-        from instrucciones import instrucciones
+        from instruccionesfa3 import instrucciones
         instrucciones()  # Mando llamar la función play del archivo menuplay
 
     def back():
