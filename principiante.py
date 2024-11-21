@@ -52,7 +52,7 @@ def levels_p():
     def jugar3():
         from sound import sound_Button
         sound_Button()
-        from characters2 import characters
+        from characters3 import characters
         characters()
 
     def back():
