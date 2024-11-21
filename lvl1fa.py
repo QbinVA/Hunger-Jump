@@ -37,7 +37,7 @@ def play():
     pygame.display.set_icon(icono)
     fondo = pygame.image.load("assets/images/fondos/lvl 1.png").convert()
     sueloPasto = pygame.image.load("assets/images/fondos/sueloPasto.png")
-    game_over_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
+    game_over_image = pygame.image.load("assets/images/fondos/gameoverniña.png").convert()
     victory_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
