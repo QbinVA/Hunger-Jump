@@ -37,7 +37,8 @@ def play():
     fondo = pygame.image.load("assets/images/fondos/lvl.3.png").convert()
     sueloPasto = pygame.image.load("assets/images/fondos/Slvl2.png")
     game_over_image = pygame.image.load("assets/images/fondos/gameoverniña.png").convert()
-    victory_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
+    victory_image = pygame.image.load("assets/images/fondos/trophy.png").convert()
+    victory_image = pygame.transform.scale(victory_image, (constantes.anchoVentana, constantes.altoVentana))
     boton_pausa = pygame.image.load("assets/images/menu/btnPausa.png").convert_alpha()
     boton_pausa_rect = boton_pausa.get_rect(center=(452, 55))
     
@@ -50,12 +51,12 @@ def play():
     boton_reintentar_image = pygame.transform.scale(boton_reintentar_image, (100, 100))
     boton_salir_image = pygame.image.load("assets/images/menu/home.png").convert_alpha()
     boton_salir_image = pygame.transform.scale(boton_salir_image, (100, 100))
-    boton_reintentar_rect = boton_reintentar_image.get_rect(center=(constantes.anchoVentana // 2, 270))
-    boton_salir_rect = boton_salir_image.get_rect(center=(constantes.anchoVentana // 2, 520))
+    boton_reintentar_rect = boton_reintentar_image.get_rect(center=(constantes.anchoVentana // 2 - 120, constantes.altoVentana - 100))
+    boton_salir_rect = boton_salir_image.get_rect(center=(constantes.anchoVentana // 2 + 120, constantes.altoVentana - 100))
 
     boton_siguiente_nivel_image = pygame.image.load("assets/images/menu/reanudar.png").convert_alpha()
     boton_siguiente_nivel_image = pygame.transform.scale(boton_siguiente_nivel_image, (100, 100))
-    boton_siguiente_nivel_rect = boton_siguiente_nivel_image.get_rect(center=(constantes.anchoVentana // 2, 395))
+    boton_siguiente_nivel_rect = boton_siguiente_nivel_image.get_rect(center=(constantes.anchoVentana // 2, constantes.altoVentana - 100))
 
     # Llama a la función sonido del archivo sound
     sound.sound_lvl_1()
@@ -195,7 +196,7 @@ def play():
                 '¡Sigue comiendo bien!' if victory else '¡Trata de comer mejor!',
                 constantes.blanco,
                 constantes.negro,
-                (constantes.anchoVentana // 2 - 225, 30),
+                (constantes.anchoVentana // 2 - 220, 200),
                 pantalla
             )
 
