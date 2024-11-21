@@ -53,8 +53,8 @@ def difi():
     def options():
         from sound import sound_Button
         sound_Button()  # Reproduce el sonido del botón
-        from principiante import levels_p
-        levels_p()  # Mando llamar la función play del archivo avanzado
+        from avanzado import levels_a
+        levels_a()  # Mando llamar la función play del archivo avanzado
 
     # Función del menú principal
     def dif_menu():
