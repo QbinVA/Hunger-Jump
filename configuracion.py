@@ -73,9 +73,9 @@ def configuracion():
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-            PLAY_BUTTON = Button(image=españolSelected, pos=((constantes.anchoVentana // 2 - 100), 200), 
+            PLAY_BUTTON = Button(image=españolSelected, pos=((constantes.anchoVentana // 2 - 100), 300), 
                                  text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=usa, pos=((constantes.anchoVentana // 2 + 100), 200), 
+            OPTIONS_BUTTON = Button(image=usa, pos=((constantes.anchoVentana // 2 + 100), 300), 
                                     text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
             LEVEL3_BUTTON = Button(image=None, pos=(250, 500), 
                                     text_input="Créditos", font=get_font(30), base_color="white", hovering_color=constantes.ocre,  hover_effect=False, border_color="black")
