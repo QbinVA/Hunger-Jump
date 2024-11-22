@@ -43,8 +43,8 @@ def configuracion():
     def ingles():
         from sound import sound_Button
         sound_Button()
-        from characters2 import characters
-        characters()
+        from settings import settings
+        settings()
 
     def creditos():
         from sound import sound_Button
