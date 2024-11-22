@@ -40,19 +40,19 @@ def levels_a():
     def jugar():
         from sound import sound_Button
         sound_Button()
-        from charactersa import characters
+        from charactersea1 import characters
         characters()
 
     def jugar2():
         from sound import sound_Button
         sound_Button()
-        from charactersa2 import characters
+        from charactersea2 import characters
         characters()
 
     def jugar3():
         from sound import sound_Button
         sound_Button()
-        from charactersa3 import characters
+        from charactersea3 import characters
         characters()
 
     def back():
