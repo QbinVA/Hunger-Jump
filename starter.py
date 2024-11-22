@@ -31,8 +31,8 @@ def get_font(size):
 def jugar():
     import sound
     sound.sound_clic2() # Reproduce el sonido del botón
-    from dificultad import difi
-    difi() #mando llamar la funcion play del archivo menuplay
+    from lore import lore
+    lore() #mando llamar la funcion play del archivo menuplay
 
 #Función de la pantalla opciones    
 def options():
