@@ -40,49 +40,8 @@ def options():
         # Llama a la función sonido del archivo sound
         sound.sound_menu() # Reproduce el soundtrack del primer nivel
 
-        while True:
-            pantalla.blit(imagen_config, (0, 0))
-
-            # Dibujar el titulo en pantalla
-            #pantalla.blit(tituloS, tituloPos)
-
-            # Después de dibujar el fondo, ahora se dibujan los botones y el texto
-            MENU_MOUSE_POS = pygame.mouse.get_pos()
-
-            MENU_TEXT = get_font(25).render("", True, "#b68f40")
-            MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
-
-            PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 200), 
-                                text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 350), 
-                                text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            LEVEL3_BUTTON = Button(image=pygame.image.load("assets/images/menu/btnPausa.png"), pos=(250, 500), 
-                                text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
-                                text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
-
-            pantalla.blit(MENU_TEXT, MENU_RECT)
-
-            for button in [PLAY_BUTTON, OPTIONS_BUTTON, LEVEL3_BUTTON, QUIT_BUTTON]:
-                button.changeColor(MENU_MOUSE_POS)
-                button.update(pantalla)
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        jugar()
-                    if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        options()
-                    if LEVEL3_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        options()
-                    if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        pass
-
-            pygame.display.update()
+        from configuracion import configuracion
+        configuracion()
 
 #Funcion del menu principal
 def main_menu():
