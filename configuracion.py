@@ -49,8 +49,8 @@ def configuracion():
     def creditos():
         from sound import sound_Button
         sound_Button()
-        from characters3 import characters
-        characters()
+        from creditos import instrucciones
+        instrucciones()
 
     def back():
         from sound import sound_clic1
