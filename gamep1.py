@@ -130,13 +130,13 @@ def play():
                         play()
                     elif boton_salir_rect.collidepoint(mouse_pos):
                         sound.sound_clic1()
-                        from principiante import levels_p
+                        from diffStarter import levels_p
                         levels_p()
                         return
                     elif victory and boton_siguiente_nivel_rect.collidepoint(mouse_pos):
                         sound.sound_clic2()
-                        import lvl2
-                        lvl2.play()
+                        import gamep2
+                        gamep2.play()
                         return
 
         if not en_pausa and not game_over and not victory:
@@ -194,10 +194,10 @@ def play():
                 pantalla.blit(victory_image, (0, 0))
             render_text_with_outline(
                 get_pixel_font(20),
-                '¡Sigue comiendo bien!' if victory else '¡Trata de comer mejor!',
+                'Keep eating well!' if victory else 'Try to eat better!',
                 constantes.blanco,
                 constantes.negro,
-                (constantes.anchoVentana // 2 - 220, 200),
+                (constantes.anchoVentana // 2 - 165, 200),
                 pantalla
             )
 
@@ -218,7 +218,7 @@ def play():
                 (10, 40),
                 pantalla
             )
-            tiempo_formateado = f"Tiempo:{int(tiempo_restante)}"
+            tiempo_formateado = f"Time:{int(tiempo_restante)}"
             render_text_with_outline(
                 get_pixel_font(22),
                 tiempo_formateado,
@@ -274,7 +274,7 @@ def play():
                     mostrar_instrucciones = True
                 elif boton_home_rect.collidepoint(mouse_pos):
                     sound.sound_clic1()  # Reproducir sonido de clic
-                    from principiante import levels_p  # Ir al menú principal
+                    from diffStarter import levels_p  # Ir al menú principal
                     levels_p()
                     return
                 

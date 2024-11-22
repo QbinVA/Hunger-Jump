@@ -34,8 +34,8 @@ def play():
     # Carga imágenes
     icono = pygame.image.load("assets/images/items/banana0.png")
     pygame.display.set_icon(icono)
-    fondo = pygame.image.load("assets/images/fondos/lvl 1.png").convert()
-    sueloPasto = pygame.image.load("assets/images/fondos/sueloPasto.png")
+    fondo = pygame.image.load("assets/images/fondos/lvl.3.png").convert()
+    sueloPasto = pygame.image.load("assets/images/fondos/Slvl2.png")
     game_over_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
     victory_image = pygame.image.load("assets/images/fondos/trophy.png").convert()
     victory_image = pygame.transform.scale(victory_image, (constantes.anchoVentana, constantes.altoVentana))
@@ -130,13 +130,13 @@ def play():
                         play()
                     elif boton_salir_rect.collidepoint(mouse_pos):
                         sound.sound_clic1()
-                        from principiante import levels_p
+                        from diffStarter import levels_p
                         levels_p()
                         return
                     elif victory and boton_siguiente_nivel_rect.collidepoint(mouse_pos):
                         sound.sound_clic2()
-                        import lvl2
-                        lvl2.play()
+                        import difficulty
+                        difficulty.difi()
                         return
 
         if not en_pausa and not game_over and not victory:
@@ -185,7 +185,7 @@ def play():
             jugador.velocidad_x = 0
 
         if suelo_y < constantes.altoVentana:
-            pantalla.blit(sueloPasto, (0, suelo_y))
+            pantalla.blit(sueloPasto, (0, 165 + suelo_y))
 
         if game_over or victory:
             if game_over:
@@ -194,10 +194,10 @@ def play():
                 pantalla.blit(victory_image, (0, 0))
             render_text_with_outline(
                 get_pixel_font(20),
-                '¡Sigue comiendo bien!' if victory else '¡Trata de comer mejor!',
+                'Keep eating well!' if victory else 'Try to eat better!',
                 constantes.blanco,
                 constantes.negro,
-                (constantes.anchoVentana // 2 - 220, 200),
+                (constantes.anchoVentana // 2 - 165, 200),
                 pantalla
             )
 
@@ -218,7 +218,7 @@ def play():
                 (10, 40),
                 pantalla
             )
-            tiempo_formateado = f"Tiempo:{int(tiempo_restante)}"
+            tiempo_formateado = f"Time:{int(tiempo_restante)}"
             render_text_with_outline(
                 get_pixel_font(22),
                 tiempo_formateado,
@@ -274,7 +274,7 @@ def play():
                     mostrar_instrucciones = True
                 elif boton_home_rect.collidepoint(mouse_pos):
                     sound.sound_clic1()  # Reproducir sonido de clic
-                    from principiante import levels_p  # Ir al menú principal
+                    from diffStarter import levels_p  # Ir al menú principal
                     levels_p()
                     return
                 

@@ -4,61 +4,62 @@ import sys
 from pygame.locals import *
 from button import Button
 import sound
-import constantes
 
 # Inicializo pygame
 pygame.init()
 
-# comentario
+# Creo y seteo valores a la pantalla
+pantalla = pygame.display.set_mode((500, 750))
+pygame.display.set_caption("Hungry Jump")  # Título de la ventana
+
+# Declaro e inserto el icono de la ventana
+icono = pygame.image.load("assets/images/items/banana0.png")
+pygame.display.set_icon(icono)
+
+# Fondo del menú
+menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
+
+btnLevel1 = pygame.image.load("assets/images/menu/levelone.png")
+btnLevel1 = pygame.transform.scale(btnLevel1, (250, 150))
+
+btnLevel2 = pygame.image.load("assets/images/menu/leveltwo.png")
+btnLevel2 = pygame.transform.scale(btnLevel2, (250, 150))
+
+btnLevel3 = pygame.image.load("assets/images/menu/levelthree.png")
+btnLevel3 = pygame.transform.scale(btnLevel3, (250, 150))
+
+backArrow = pygame.image.load("assets/images/menu/backArrow.png")
+backArrow = pygame.transform.scale(backArrow, (230, 160))
 
 # Fuente
 def get_font(size):
-    return pygame.font.Font("assets/Font/PressStart2P-Regular.ttf", size)
+    return pygame.font.Font("assets/Font/font.ttf", size)
 
 # Pantalla de niveles
-def settings():
-
-    # Creo y seteo valores a la pantalla
-    pantalla = pygame.display.set_mode((500, 750))
-    pygame.display.set_caption("Hungry Jump")  # Título de la ventana
-
-    # Declaro e inserto el icono de la ventana
-    icono = pygame.image.load("assets/images/items/banana0.png")
-    pygame.display.set_icon(icono)
-
-    # Fondo del menú
-    menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
-
-    español_image = pygame.image.load("assets/images/idiomas/mexico.jpg").convert()
-    español_image = pygame.transform.scale(español_image, (140, 110))
-
-    usaSelected = pygame.image.load("assets/images/idiomas/usaselected.jpg").convert()
-    usaSelected = pygame.transform.scale(usaSelected, (160, 130))
-
-    backArrow = pygame.image.load("assets/images/menu/backArrow.png")
-    backArrow = pygame.transform.scale(backArrow, (230, 160))
-
-    def español():
+def levels_p():
+    def jugar():
         from sound import sound_Button
         sound_Button()
-        from configuracion import configuracion
-        configuracion()
+        from characterse import characters
+        characters()
 
-    def ingles():
+    def jugar2():
         from sound import sound_Button
         sound_Button()
-        
-    def creditos():
+        from charactersep2 import characters
+        characters()
+
+    def jugar3():
         from sound import sound_Button
         sound_Button()
-        from creditos import instrucciones
-        instrucciones()
+        from charactersep3 import characters
+        characters()
 
     def back():
         from sound import sound_clic1
         sound_clic1()
-        from startere import main_menu
-        main_menu()
+        from difficulty import difi
+        difi()
 
     # Menú de niveles
     def levels_menu():
@@ -75,12 +76,12 @@ def settings():
 
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-            PLAY_BUTTON = Button(image=español_image, pos=((constantes.anchoVentana // 2 - 100), 300), 
+            PLAY_BUTTON = Button(image=btnLevel1, pos=(250, 200), 
                                  text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=usaSelected, pos=((constantes.anchoVentana // 2 + 100), 300), 
+            OPTIONS_BUTTON = Button(image=btnLevel2, pos=(250, 350), 
                                     text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            LEVEL3_BUTTON = Button(image=None, pos=(250, 500), 
-                                    text_input="Credits", font=get_font(30), base_color="white", hovering_color=constantes.ocre,  hover_effect=False, border_color="black")
+            LEVEL3_BUTTON = Button(image=btnLevel3, pos=(250, 500), 
+                                    text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
             QUIT_BUTTON = Button(image=backArrow, pos=(95, 680), 
                                  text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
@@ -96,11 +97,11 @@ def settings():
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        español()
+                        jugar()
                     if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        ingles()
+                        jugar2()
                     if LEVEL3_BUTTON.checkForInput(MENU_MOUSE_POS):
-                        creditos()
+                        jugar3()
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         back()
 

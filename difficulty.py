@@ -19,11 +19,11 @@ pygame.display.set_icon(icono)
 # Fondo del menú
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
 
-btnPrincipiante = pygame.image.load("assets/images/menu/btnprincipiante.png")
-btnPrincipiante = pygame.transform.scale(btnPrincipiante, (300, 150))
+btnPrincipiante = pygame.image.load("assets/images/menu/btnStarter.png")
+btnPrincipiante = pygame.transform.scale(btnPrincipiante, (300, 120))
 
-btnAvanzado = pygame.image.load("assets/images/menu/btnavanzado.png")
-btnAvanzado = pygame.transform.scale(btnAvanzado, (300, 150))
+btnAvanzado = pygame.image.load("assets/images/menu/btnAdvanced.png")
+btnAvanzado = pygame.transform.scale(btnAvanzado, (300, 120))
 
 backArrow = pygame.image.load("assets/images/menu/backArrow.png")
 backArrow = pygame.transform.scale(backArrow, (230, 160))
@@ -39,21 +39,21 @@ def difi():
     def back():
         from sound import sound_clic1
         sound_clic1()  # Reproduce el sonido del botón
-        from starter import main_menu
+        from startere import main_menu
         main_menu()
 
     # Función de la pantalla play
     def jugar():
         from sound import sound_Button
         sound_Button()  # Reproduce el sonido del botón
-        from principiante import levels_p
+        from diffStarter import levels_p
         levels_p()  # Mando llamar la función play del archivo principiante
 
     # Función de la pantalla opciones    
     def options():
         from sound import sound_Button
         sound_Button()  # Reproduce el sonido del botón
-        from avanzado import levels_a
+        from diffAdvanced import levels_a
         levels_a()  # Mando llamar la función play del archivo avanzado
 
     # Función del menú principal
