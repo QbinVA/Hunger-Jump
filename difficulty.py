@@ -20,10 +20,10 @@ pygame.display.set_icon(icono)
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
 
 btnPrincipiante = pygame.image.load("assets/images/menu/btnStarter.png")
-btnPrincipiante = pygame.transform.scale(btnPrincipiante, (300, 120))
+btnPrincipiante = pygame.transform.scale(btnPrincipiante, (300, 100))
 
 btnAvanzado = pygame.image.load("assets/images/menu/btnAdvanced.png")
-btnAvanzado = pygame.transform.scale(btnAvanzado, (300, 120))
+btnAvanzado = pygame.transform.scale(btnAvanzado, (300, 100))
 
 backArrow = pygame.image.load("assets/images/menu/backArrow.png")
 backArrow = pygame.transform.scale(backArrow, (230, 160))
