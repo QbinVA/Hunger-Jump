@@ -1,57 +1,66 @@
-#Importo pygame y sistema
+# Importo pygame y sistema
 import pygame, sys
-#Importo la pantalla
-import pygame.display
 from pygame.locals import *
 from button import Button
-import constantes
-import menuplay
 import sound
-import starter
-import principiante
 import avanzado
 
-#Inicializo pygame
+# Inicializo pygame
 pygame.init()
 
-#Creo y seteo valores a la pantalla
+# Creo y seteo valores a la pantalla
 pantalla = pygame.display.set_mode((500, 750))
-pygame.display.set_caption("Hungry Jump") #Titulo de la ventana
+pygame.display.set_caption("Hungry Jump")  # Título de la ventana
 
-#Declaro e inserto el icono de la ventana
+# Declaro e inserto el icono de la ventana
 icono = pygame.image.load("assets/images/items/banana0.png")
 pygame.display.set_icon(icono)
 
-#Fondo del menu
+# Fondo del menú
 menuBg = pygame.image.load("assets/images/fondos/menuBg.png")
 
-#Fuente
+btnPrincipiante = pygame.image.load("assets/images/menu/btnprincipiante.png")
+btnPrincipiante = pygame.transform.scale(btnPrincipiante, (300, 175))
+
+btnAvanzado = pygame.image.load("assets/images/menu/btnavanzado.png")
+btnAvanzado = pygame.transform.scale(btnAvanzado, (300, 175))
+
+backArrow = pygame.image.load("assets/images/menu/backArrow.png")
+backArrow = pygame.transform.scale(backArrow, (230, 160))
+
+# Fuente
 def get_font(size):
     return pygame.font.Font("assets/Font/font.ttf", size)
 
-
 def difi():
 
+    sound.sound_menu()  # Reproduce el soundtrack del primer nivel
+
     def back():
-        starter.main_menu()
+        from sound import sound_clic1
+        sound_clic1()  # Reproduce el sonido del botón
+        from starter import main_menu
+        main_menu()
 
-    #Función de la pantalla play
+    # Función de la pantalla play
     def jugar():
-        principiante.levels_p() #mando llamar la funcion play del archivo menuplay
+        from sound import sound_Button
+        sound_Button()  # Reproduce el sonido del botón
+        from principiante import levels_p
+        levels_p()  # Mando llamar la función play del archivo principiante
 
-    #Función de la pantalla opciones    
+    # Función de la pantalla opciones    
     def options():
-        principiante.levels_p() #mando llamar la funcion play del archivo menuplay
+        from sound import sound_Button
+        sound_Button()  # Reproduce el sonido del botón
+        from avanzado import levels_a
+        levels_a()  # Mando llamar la función play del archivo avanzado
 
-
-    #Funcion del menu principal
+    # Función del menú principal
     def dif_menu():
         # Variables para el desplazamiento del fondo
         x = 0  # Posición inicial del fondo
         velocidad_fondo = 1  # Velocidad de desplazamiento del fondo
-
-        # Llama a la función sonido del archivo sound
-        sound.sound_menu() # Reproduce el soundtrack del primer nivel
 
         while True:
             # Desplazamiento horizontal del fondo
@@ -68,17 +77,19 @@ def difi():
             MENU_TEXT = get_font(25).render("", True, "#b68f40")
             MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
 
-            PLAY_BUTTON = Button(image=pygame.image.load("assets/images/menu/StartButton.png"), pos=(250, 250), 
+            PLAY_BUTTON = Button(image=btnPrincipiante, pos=(250, 300), 
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
-            OPTIONS_BUTTON = Button(image=pygame.image.load("assets/images/menu/StartButton.png"), pos=(250, 500), 
+            OPTIONS_BUTTON = Button(image=btnAvanzado, pos=(250, 450), 
                                 text_input="", font=get_font(25), base_color="#d7fcd4", hovering_color="White")
-            QUIT_BUTTON = Button(image=pygame.image.load("assets/images/menu/botonSalir.png"), pos=(70, 680), 
+            QUIT_BUTTON = Button(image=backArrow, pos=(95, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
             pantalla.blit(MENU_TEXT, MENU_RECT)
 
+            # Agregar hoverEffect para los botones
             for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
+                button.hoverEffect(MENU_MOUSE_POS)  # Aplicar el efecto de hover
                 button.update(pantalla)
 
             for event in pygame.event.get():

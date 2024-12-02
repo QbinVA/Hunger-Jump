@@ -1,5 +1,6 @@
 import pygame
 import constantes
+import sound  # Asegúrate de importar el archivo de sonido
 
 class player(pygame.sprite.Sprite):
     def __init__(self, ramas):
@@ -53,13 +54,14 @@ class player(pygame.sprite.Sprite):
         if (teclas[pygame.K_SPACE] or teclas[pygame.K_UP]) and self.puede_saltar:
             self.velocidad_y = self.fuerza_salto
             self.puede_saltar = False  # Desactivar salto hasta que toque el suelo o la rama
+            sound.sound_jump()  # Reproducir el sonido del salto
 
         # Aplica gravedad
         self.velocidad_y += self.gravedad
         self.rect.y += self.velocidad_y
 
         # Verificar si ha subido 400 píxeles
-        if not self.ha_subido_400px and self.rect.y <= constantes.altoVentana - 400:
+        if not self.ha_subido_400px and self.rect.y <= constantes.altoVentana - 300:
             self.ha_subido_400px = True  # Activa la capacidad de salir de los bordes
 
         # Colisiones con las ramas
@@ -73,12 +75,11 @@ class player(pygame.sprite.Sprite):
         else:
             self.en_rama = False
 
-        # Limitar movimiento dentro de la pantalla solo si no ha subido 400 px
-        if not self.ha_subido_400px:
-            if self.rect.left < 0:
-                self.rect.left = 0
-            if self.rect.right > constantes.anchoVentana:
-                self.rect.right = constantes.anchoVentana
+        # Limitar movimiento dentro de la pantalla
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > constantes.anchoVentana:
+            self.rect.right = constantes.anchoVentana
 
         # Asegurarse de que no salga del suelo si no ha subido 400 px
         if not self.ha_subido_400px:
@@ -90,8 +91,3 @@ class player(pygame.sprite.Sprite):
         # Verificar si el jugador cae por debajo del margen inferior de la pantalla
         if self.ha_subido_400px and self.rect.top > constantes.altoVentana:
             self.kill()  # Elimina al jugador para que pierda el nivel
-            self.activar_pantalla_perder()  # Llama a la función para activar la pantalla de pérdida
-
-    def activar_pantalla_perder(self):
-        # Aquí se activaría la pantalla de pérdida
-        print("Pantalla de pérdida activada")  # Reemplaza esto con la lógica de tu pantalla de pérdida
