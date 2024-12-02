@@ -135,8 +135,8 @@ def play():
                         return
                     elif victory and boton_siguiente_nivel_rect.collidepoint(mouse_pos):
                         sound.sound_clic2()
-                        from avanzado import siguiente_nivel
-                        siguiente_nivel()
+                        import lvl2
+                        lvl2.play()
                         return
 
         if not en_pausa and not game_over and not victory:
@@ -274,8 +274,8 @@ def play():
                     mostrar_instrucciones = True
                 elif boton_home_rect.collidepoint(mouse_pos):
                     sound.sound_clic1()  # Reproducir sonido de clic
-                    from avanzado import levels_a  # Ir al menú principal
-                    levels_a()
+                    from principiante import levels_p  # Ir al menú principal
+                    levels_p()
                     return
                 
             if mostrar_instrucciones == True:
