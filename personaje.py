@@ -19,9 +19,9 @@ class player(pygame.sprite.Sprite):
         self.image = self.imagen_estatica
         self.rect = self.image.get_rect()
 
-        # Posiciona al jugador en el centro horizontal y en una posición específica del eje Y
-        self.rect.x = constantes.anchoVentana // 2  # Mantiene la posición horizontal centrada
-        self.rect.y = constantes.altoVentana - 150  # Ajusta este valor para modificar la ubicación inicial en el eje Y
+        # Posiciona al jugador en el centro horizontal y en el suelo
+        self.rect.x = constantes.anchoVentana // 2
+        self.rect.y = constantes.altoVentana - 70
 
         self.velocidad_x = 0
         self.velocidad_y = 0
@@ -29,6 +29,7 @@ class player(pygame.sprite.Sprite):
         self.gravedad = 1
         self.en_rama = False
         self.puede_saltar = True  # Controla si el jugador puede saltar o no
+        self.ha_subido_400px = False  # Verifica si el jugador ya subió 400 píxeles
 
         self.ramas = ramas
 
@@ -51,33 +52,46 @@ class player(pygame.sprite.Sprite):
         # Salto controlado por el jugador
         if (teclas[pygame.K_SPACE] or teclas[pygame.K_UP]) and self.puede_saltar:
             self.velocidad_y = self.fuerza_salto
-            self.puede_saltar = False
+            self.puede_saltar = False  # Desactivar salto hasta que toque el suelo o la rama
 
-        # Aplicar gravedad
+        # Aplica gravedad
         self.velocidad_y += self.gravedad
         self.rect.y += self.velocidad_y
 
-        # Verificar colisiones con las ramas
+        # Verificar si ha subido 400 píxeles
+        if not self.ha_subido_400px and self.rect.y <= constantes.altoVentana - 400:
+            self.ha_subido_400px = True  # Activa la capacidad de salir de los bordes
+
+        # Colisiones con las ramas
         colisiones = pygame.sprite.spritecollide(self, self.ramas, False)
         if colisiones:
-            # Verifica si está cayendo y toca la rama
             if self.velocidad_y > 0 and self.rect.bottom <= colisiones[0].rect.bottom:
                 self.rect.bottom = colisiones[0].rect.top
                 self.velocidad_y = 0
-                self.puede_saltar = True  # Permite que el jugador vuelva a saltar
+                self.puede_saltar = True  # Permite saltar de nuevo
                 self.en_rama = True
         else:
             self.en_rama = False
 
-        # Limitar movimiento dentro de la pantalla
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.right > constantes.anchoVentana:
-            self.rect.right = constantes.anchoVentana
+        # Limitar movimiento dentro de la pantalla solo si no ha subido 400 px
+        if not self.ha_subido_400px:
+            if self.rect.left < 0:
+                self.rect.left = 0
+            if self.rect.right > constantes.anchoVentana:
+                self.rect.right = constantes.anchoVentana
 
-        # Asegurarse de que no salga del suelo
-        if self.rect.bottom >= constantes.altoVentana - 70:  # Cambié el margen inferior a -50
-            self.rect.bottom = constantes.altoVentana - 70  # Ajusta esto según la altura del suelo
-            self.velocidad_y = 0
-            self.puede_saltar = True  # Asegura que pueda volver a saltar desde el suelo
+        # Asegurarse de que no salga del suelo si no ha subido 400 px
+        if not self.ha_subido_400px:
+            if self.rect.bottom >= constantes.altoVentana - 70:
+                self.rect.bottom = constantes.altoVentana - 70
+                self.velocidad_y = 0
+                self.puede_saltar = True
 
+        # Verificar si el jugador cae por debajo del margen inferior de la pantalla
+        if self.ha_subido_400px and self.rect.top > constantes.altoVentana:
+            self.kill()  # Elimina al jugador para que pierda el nivel
+            self.activar_pantalla_perder()  # Llama a la función para activar la pantalla de pérdida
+
+    def activar_pantalla_perder(self):
+        # Aquí se activaría la pantalla de pérdida
+        print("Pantalla de pérdida activada")  # Reemplaza esto con la lógica de tu pantalla de pérdida

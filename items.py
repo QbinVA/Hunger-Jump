@@ -35,10 +35,10 @@ class aitems(pygame.sprite.Sprite):
 
         # Variables para el control de la velocidad
         self.last_update_time = pygame.time.get_ticks()
-        self.frame_interval = 250  # Intervalo en milisegundos (ajusta este valor para cambiar la velocidad)
+        self.frame_interval = 250  # Intervalo en milisegundos
 
         # Coordenadas para la posición
-        self.rect = pygame.Rect(0, 0, *tamaño)  # Usa el tamaño proporcionado
+        self.rect = pygame.Rect(0, 0, *tamaño)
         self.rect.x = posicion_rama.x + 20
         self.rect.y = posicion_rama.y - 45
 
@@ -48,14 +48,14 @@ class aitems(pygame.sprite.Sprite):
             if self.frames:
                 self.image = self.frames[self.current_frame]
             else:
-                self.image = pygame.Surface(tamaño)  # Superficie de placeholder
+                self.image = pygame.Surface(tamaño)
         else:
             # Carga una imagen estática
             self.image = pygame.image.load(self.item_seleccionado).convert_alpha()
-            self.image = pygame.transform.scale(self.image, tamaño)  # Escalar a tamaño especificado
+            self.image = pygame.transform.scale(self.image, tamaño)
 
     def load_video(self, video_path):
-        """Carga todos los fotogramas del video en la lista."""
+        """Carga todos los fotogramas del video y aplica transparencia al fondo negro."""
         self.video = cv2.VideoCapture(video_path)
         if not self.video.isOpened():
             print(f"Error al abrir el video: {video_path}")
@@ -65,13 +65,25 @@ class aitems(pygame.sprite.Sprite):
             ret, frame = self.video.read()
             if not ret:
                 break
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convierte BGR a RGB
-            frame_surface = pygame.surfarray.make_surface(np.array(frame))
-            frame_surface = pygame.transform.scale(frame_surface, self.rect.size)  # Escalar a tamaño especificado
-            frame_surface = pygame.transform.rotate(frame_surface, 270)  # Ajustar la rotación si es necesario
+            
+            # Convierte el color del fotograma y escala al tamaño del rectángulo
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            frame = cv2.resize(frame, self.rect.size)
+            
+            # Convierte el fondo negro en transparencia usando una máscara
+            frame_rgba = cv2.cvtColor(frame, cv2.COLOR_RGB2RGBA)
+            black_pixels = np.all(frame[:, :, :] == [0, 0, 0], axis=-1)
+            frame_rgba[black_pixels] = [0, 0, 0, 0]
+
+            # Convierte a Surface de Pygame y ajusta la rotación si es necesario
+            frame_surface = pygame.surfarray.make_surface(frame_rgba[:, :, :3].swapaxes(0, 1))
+            frame_surface.set_colorkey((0, 0, 0))  # Define el fondo como transparente
+            frame_surface = pygame.transform.rotate(frame_surface, 360)  
+            
+            # Almacena cada frame en la lista
             self.frames.append(frame_surface)
 
-        self.video.set(cv2.CAP_PROP_POS_FRAMES, 0)  # Reinicia el video para poder reproducirlo de nuevo
+        self.video.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
     def update(self):
         """Actualiza el fotograma actual del video si es necesario."""
