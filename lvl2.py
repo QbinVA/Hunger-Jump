@@ -34,7 +34,8 @@ def play():
     # Carga imágenes
     icono = pygame.image.load("assets/images/items/banana0.png")
     pygame.display.set_icon(icono)
-    fondo = pygame.image.load("assets/images/fondos/lvl2r.png").convert()
+    fondo = pygame.image.load("assets/images/fondos/fondo nvl 2.png").convert()
+    fondo = pygame.transform.scale(fondo, (constantes.anchoVentana, constantes.altoVentana))
     sueloPasto = pygame.image.load("assets/images/fondos/Slvl2.png")
     game_over_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
     victory_image = pygame.image.load("assets/images/fondos/trophy.png").convert()
