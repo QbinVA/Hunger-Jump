@@ -74,12 +74,15 @@ def characters():
             pantalla.blit(menuBg, (x_relativa - menuBg.get_rect().width, 0))
             pantalla.blit(menuBg, (x_relativa, 0))
 
-            # Después de dibujar el fondo, ahora se dibujan los botones y el texto
+            # Coordenadas del mouse
             MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-            MENU_TEXT = get_font(25).render("", True, "#b68f40")
-            MENU_RECT = MENU_TEXT.get_rect(center=(200, 300))
+            # Texto principal (con tamaño de fuente de 13)
+            MENU_TEXT = get_font(15).render("Selecciona un personaje", True, "#000000")  # Cambié el color a negro
+            MENU_RECT = MENU_TEXT.get_rect(center=(250, 150))  # Ajustado para que se vea bien en la pantalla
+            pantalla.blit(MENU_TEXT, MENU_RECT)
 
+            # Botones
             PLAY_BUTTON = Button(image=iNiño, pos=(170, 375), 
                                 text_input="", font=get_font(20), base_color="#d7fcd4", hovering_color="White")
             OPTIONS_BUTTON = Button(image=iNiña, pos=(330, 375), 
@@ -87,14 +90,13 @@ def characters():
             QUIT_BUTTON = Button(image=backArrow, pos=(95, 680), 
                                 text_input="", font=get_font(22), base_color="#d7fcd4", hovering_color="White")
 
-            pantalla.blit(MENU_TEXT, MENU_RECT)
-
             # Agregar hoverEffect para los botones
             for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
                 button.changeColor(MENU_MOUSE_POS)
                 button.hoverEffect(MENU_MOUSE_POS)  # Aplicar el efecto de hover
                 button.update(pantalla)
 
+            # Manejo de eventos
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -108,6 +110,7 @@ def characters():
                     if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
                         back()
 
+            # Actualiza la pantalla
             pygame.display.update()
 
     characters_menu()
