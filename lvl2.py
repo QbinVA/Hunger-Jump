@@ -34,7 +34,8 @@ def play():
     # Carga imágenes
     icono = pygame.image.load("assets/images/items/banana0.png")
     pygame.display.set_icon(icono)
-    fondo = pygame.image.load("assets/images/fondos/lvl2r.png").convert()
+    fondo = pygame.image.load("assets/images/fondos/fondo nvl 2.png").convert()
+    fondo = pygame.transform.scale(fondo, (constantes.anchoVentana, constantes.altoVentana))
     sueloPasto = pygame.image.load("assets/images/fondos/Slvl2.png")
     game_over_image = pygame.image.load("assets/images/fondos/gameoverniño.png").convert()
     victory_image = pygame.image.load("assets/images/fondos/trophy.png").convert()
@@ -135,8 +136,8 @@ def play():
                         return
                     elif victory and boton_siguiente_nivel_rect.collidepoint(mouse_pos):
                         sound.sound_clic2()
-                        from avanzado import siguiente_nivel
-                        siguiente_nivel()
+                        import lvl3
+                        lvl3.play()
                         return
 
         if not en_pausa and not game_over and not victory:

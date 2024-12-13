@@ -135,8 +135,8 @@ def play():
                         return
                     elif victory and boton_siguiente_nivel_rect.collidepoint(mouse_pos):
                         sound.sound_clic2()
-                        from avanzado import siguiente_nivel
-                        siguiente_nivel()
+                        from dificultad import difi
+                        difi()
                         return
 
         if not en_pausa and not game_over and not victory:
